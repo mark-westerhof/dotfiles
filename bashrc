@@ -33,9 +33,7 @@ function devsession() {
 }
 
 # Aliases
-# if command -v nvim 2>&1 >/dev/null; then
-#     alias vim='nvim'
-# fi
+alias setup_ssh_clipboard='. ~/.ssh_clipboard'
 alias fortigate='fgtdev conf get fortigate | awk -F ": " "{print \$2}"'
 alias fortigate_port='fgtdev conf get ssh_port | awk -F ": " "{print \$2}"'
 alias sshfgt='ssh -p $(fortigate_port) admin@$(fortigate)'

@@ -8,6 +8,7 @@ ln -sf $CHECKOUT_PATH/base16-default.dark.sh ~/.base16_shell.sh
 ln -sf $CHECKOUT_PATH/bashrc ~/.bashrc
 ln -sf $CHECKOUT_PATH/tmux.conf ~/.tmux.conf
 ln -sf $CHECKOUT_PATH/vimrc ~/.vimrc
+ln -sf $CHECKOUT_PATH/ssh_clipboard ~/.ssh_clipboard
 
 if [ "$(uname)" == "Darwin" ]; then
     ln -sf $CHECKOUT_PATH/bash_profile_osx ~/.bash_profile
