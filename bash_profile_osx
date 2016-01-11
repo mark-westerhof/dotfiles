@@ -1,0 +1,13 @@
+PS1='\[\e[0;32m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[1;32m\]\$\[\e[m\] '
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
+
+alias ll='ls -l'
+
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+fi
+
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc;
+fi
