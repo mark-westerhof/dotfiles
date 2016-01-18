@@ -100,6 +100,10 @@ nnoremap fd :bp<bar>sp<bar>bn<bar>bd<CR>
 nnoremap <Leader>o :only<CR>
 nnoremap <Leader>r :redraw!<CR>
 
+"Copy pasting between vim instances
+vnoremap <leader>y :w! /tmp/vim_clipboard<CR>
+nnoremap <leader>p :r! cat /tmp/vim_clipboard<CR>
+
 "vimrc
 nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <Leader>sv :source $MYVIMRC<CR>
