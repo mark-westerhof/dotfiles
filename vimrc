@@ -29,7 +29,8 @@ else
 endif
 
 if &t_Co >= 256 || has('gui_running')
-    Plug 'bling/vim-airline'
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
     Plug 'edkolev/tmuxline.vim'
 endif
 
