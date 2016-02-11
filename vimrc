@@ -235,7 +235,7 @@ vnoremap <C-g> "hy:tabedit %<CR>:Ggrep <C-r>h
 let g:gitgutter_max_signs = 10000
 
 "YouCompleteMe
-let g:ycm_autoclose_preview_window_after_completion = 1
+set completeopt-=preview
 "FortiOS has too many tags
 let g:ycm_filetype_specific_completion_to_disable = {
     \ 'c': 1
