@@ -1,7 +1,7 @@
 ! General configuration
 URxvt.termName: rxvt-unicode-256color
 URxvt.scrollBar: false
-URxvt.font: xft:Source Code Pro Medium:size=10
+URxvt.font: xft:Sauce Code Powerline Medium:size=10
 URxvt.geometry: 140x40
 URxvt.letterSpace: -1
 URxvt.pointerBlank: true

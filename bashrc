@@ -26,15 +26,24 @@ if [ -f "$HOME/.nvm/nvm.sh" ]; then
     export NODE_PATH=$(npm root -g)
 fi
 
-# Development tmux helper
-function devsession() {
-    directory=${1%/}
-    (cd $directory && tmux new -s $directory)
-}
-
 # Aliases
 alias fortigate='fgtdev conf get fortigate | awk -F ": " "{print \$2}"'
 alias fortigate_port='fgtdev conf get ssh_port | awk -F ": " "{print \$2}"'
 alias sshfgt='ssh -p $(fortigate_port) admin@$(fortigate)'
 alias createtags='git ls-files | grep -v -E "^linux-" | ctags -R -L -'
 alias gpush='git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)'
+
+# Development tmux helper
+function devsession() {
+    directory=${1%/}
+    (cd $directory && tmux new -s $directory)
+}
+
+# Source code indexing
+function indexsource() {
+    echo "Creating ctags..."
+    createtags
+    echo "Creating cscope db..."
+    rm -f cscope.*
+    cscope -R -b -q -k
+}

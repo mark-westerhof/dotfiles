@@ -21,16 +21,11 @@ Plug 'heavenshell/vim-jsdoc'
 Plug 'wavded/vim-stylus'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
-
-if has('nvim')
-    Plug 'benekastah/neomake'
-else
-    Plug 'scrooloose/syntastic', {'tag': '3.7.0'}
-endif
+Plug 'scrooloose/syntastic', {'tag': '3.7.0'}
 
 if &t_Co >= 256 || has('gui_running')
-    Plug 'vim-airline/vim-airline'
-    Plug 'vim-airline/vim-airline-themes'
+    Plug 'itchyny/lightline.vim'
+    Plug 'daviesjamie/vim-base16-lightline'
     Plug 'edkolev/tmuxline.vim'
 endif
 
@@ -120,17 +115,13 @@ nnoremap <Leader>fu :execute '!fgtdev up '.expand('%s')<CR>
 
 "Appearance {{{
 
-"Airline
-set laststatus=2
-set noshowmode
-set ttimeoutlen=10
-
+"Lightline
 if &t_Co >= 256 || has('gui_running')
     set background=dark
 
     if has('gui_running')
         "Gvim
-        set guifont=Source\ Code\ Pro\ Medium\ 11
+        set guifont=Sauce\ Code\ Powerline\ Medium\ 11
         set guioptions-=m  "menu bar
         set guioptions-=T  "toolbar
         set guioptions-=r  "right scrollbar
@@ -138,6 +129,86 @@ if &t_Co >= 256 || has('gui_running')
     else
         let base16colorspace=256
     endif
+
+    set laststatus=2
+    set noshowmode
+    set ttimeoutlen=10
+
+    let g:lightline = {
+    \   'colorscheme': 'base16',
+    \   'active': {
+    \       'left': [ [ 'mode', 'paste' ],
+    \                 [ 'fugitive', 'filename' ] ],
+    \       'right': [ ['syntastic', 'lineinfo'],
+    \                  ['percent'],
+    \                  ['fileformat', 'fileencoding', 'filetype'] ]
+    \   },
+    \   'component_function': {
+    \       'fugitive': 'LightLineFugitive',
+    \       'filename': 'LightLineFilename',
+    \       'fileformat': 'LightLineFileFormat',
+    \       'filetype': 'LightLineFileType',
+    \       'fileencoding': 'LightLineFileEncoding',
+    \       'mode': 'LightLineMode',
+    \       'lineinfo': 'LightLineLineInfo'
+    \   },
+    \   'component_expand': {
+    \       'syntastic': 'SyntasticStatuslineFlag'
+    \   },
+    \   'component_type': {
+    \       'syntastic': 'error'
+    \   },
+    \   'separator': { 'left': '', 'right': ''},
+    \   'subseparator': { 'left': '', 'right': ''}
+    \}
+
+    let s:lightline_wrap1 = 120
+    let s:lightline_wrap2 = 80
+    let s:lightline_wrap3 = 60
+
+    function! LightLineModified()
+        return &modified ? '+' : ''
+    endfunction
+
+    function! LightLineReadonly()
+        return &readonly ? '' : ''
+    endfunction
+
+    function! LightLineFugitive()
+        if exists("*fugitive#head") && winwidth(0) > s:lightline_wrap1
+            let _ = fugitive#head()
+            return strlen(_) ? ' '._ : ''
+        endif
+        return ''
+    endfunction
+
+    function! LightLineFilename()
+        let fname = expand('%')
+        return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+            \ ('' != fname ? (winwidth(0) > s:lightline_wrap3 ? fname : expand('%:t')) : '[No Name]') .
+            \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+    endfunction
+
+    function! LightLineFileFormat()
+        return winwidth(0) > s:lightline_wrap2 ? &fileformat : ''
+    endfunction
+
+    function! LightLineFileType()
+        return winwidth(0) > s:lightline_wrap2 ? (strlen(&filetype) ? &filetype : '') : ''
+    endfunction
+
+    function! LightLineFileEncoding()
+        return winwidth(0) > s:lightline_wrap2 ? (strlen(&fenc) ? &fenc : &enc) : ''
+    endfunction
+
+    function! LightLineMode()
+        return winwidth(0) > s:lightline_wrap2 ? lightline#mode() : ''
+    endfunction
+
+    function! LightLineLineInfo()
+        return ' ' . printf('%3d:%-2d', line('.'), col('.'))
+    endfunction
+
 
     colorscheme base16-default
 
@@ -161,8 +232,24 @@ endif
 
 " }}}
 
-" Ctags {{{
+" Ctags & Cscope {{{
 set tags=./tags;
+
+if has('cscope')
+    set cscopetag cscopeverbose
+
+    function! LoadCscope()
+        let db = findfile('cscope.out', '.;')
+        if (!empty(db))
+            let path = strpart(db, 0, match(db, '/cscope.out$'))
+            " Suppress duplicate connection error
+            set nocscopeverbose
+            exe "cs add " . db . " " . path
+            set cscopeverbose
+        endif
+    endfunction
+    au BufEnter /* call LoadCscope()
+endif
 
 "Open tag in vsplit
 nnoremap <Leader>] :rightb vsp <CR>:exec("tag ".expand("<cword>"))<CR>
@@ -177,35 +264,30 @@ let g:airline#extensions#tagbar#enabled = 0
 let g:airline#extensions#tabline#enabled = 1
 
 "Tmuxline
-let g:tmuxline_powerline_separators = 0
+let g:tmuxline_powerline_separators = 1
 
 "Taglist Bar
 nnoremap <F3> :TagbarToggle<CR>
 let g:tagbar_sort = 0
 
 "Linting
-if has('nvim')
-    let g:neomake_verbose = 0
-    let g:neomake_serialize = 1
-    let g:neomake_javascript_enabled_makers = ['jscs', 'jshint']
-    let g:neomake_python_enabled_makers = ['flake8']
-    let g:neomake_error_sign = {
-        \ 'text': '>>',
-        \ 'texthl': 'Error',
-        \ }
-    let g:neomake_warning_sign = {
-        \ 'text': '>>',
-        \ 'texthl': 'IncSearch',
-        \ }
-    autocmd! BufWritePost * Neomake
-else
-    let g:syntastic_enable_highlighting = 0
-    let g:syntastic_always_populate_loc_list = 1
-    let g:syntastic_javascript_checkers = ['jscs', 'jshint']
-    let g:syntastic_ignore_files = ['.*\.json', '.*migadmin/lang/.*\.js']
-    nnoremap <Leader>sc :SyntasticCheck<CR>
-    nnoremap <Leader>st :SyntasticToggleMode<CR>
-endif
+let g:syntastic_mode_map = { 'mode': 'passive' }
+let g:syntastic_enable_highlighting = 0
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_javascript_checkers = ['jscs', 'jshint']
+let g:syntastic_ignore_files = ['.*\.json', '.*migadmin/lang/.*\.js']
+
+function! g:SyntaxCheck()
+    SyntasticCheck
+    call lightline#update()
+endfunction
+
+augroup AutoSyntastic
+    autocmd!
+    autocmd BufWritePost * call g:SyntaxCheck()
+augroup END
+
+nnoremap <silent> <Leader>sc :call g:SyntaxCheck()<CR>
 
 "Easymotion
 let g:EasyMotion_leader_key = '<Leader>'
