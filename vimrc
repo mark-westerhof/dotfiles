@@ -25,7 +25,7 @@ Plug 'scrooloose/syntastic', {'tag': '3.7.0'}
 
 if &t_Co >= 256 || has('gui_running')
     Plug 'itchyny/lightline.vim'
-    Plug 'daviesjamie/vim-base16-lightline'
+    Plug 'mark-westerhof/vim-base16-256-terminal-lightline'
     Plug 'edkolev/tmuxline.vim'
 endif
 
@@ -135,7 +135,7 @@ if &t_Co >= 256 || has('gui_running')
     set ttimeoutlen=10
 
     let g:lightline = {
-    \   'colorscheme': 'base16',
+    \   'colorscheme': 'base16_default_256_terminal',
     \   'active': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
