@@ -3,7 +3,7 @@
 "Plugins{{{
 call plug#begin('~/.vim/plugged')
 
-Plug 'chriskempson/base16-vim'
+Plug 'morhetz/gruvbox'
 Plug 'tomtom/tcomment_vim'
 Plug 'majutsushi/tagbar'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
@@ -15,8 +15,6 @@ Plug 'airblade/vim-gitgutter'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
-Plug 'jelera/vim-javascript-syntax'
-Plug 'pangloss/vim-javascript'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'wavded/vim-stylus'
 Plug 'editorconfig/editorconfig-vim'
@@ -25,7 +23,6 @@ Plug 'scrooloose/syntastic', {'tag': '3.7.0'}
 
 if &t_Co >= 256 || has('gui_running')
     Plug 'itchyny/lightline.vim'
-    Plug 'mark-westerhof/vim-base16-256-terminal-lightline'
     Plug 'edkolev/tmuxline.vim'
 endif
 
@@ -121,13 +118,11 @@ if &t_Co >= 256 || has('gui_running')
 
     if has('gui_running')
         "Gvim
-        set guifont=Sauce\ Code\ Powerline\ Medium\ 11
+        set guifont=Hack\ 11
         set guioptions-=m  "menu bar
         set guioptions-=T  "toolbar
         set guioptions-=r  "right scrollbar
         set guioptions-=L  "left scrollbar
-    else
-        let base16colorspace=256
     endif
 
     set laststatus=2
@@ -135,7 +130,7 @@ if &t_Co >= 256 || has('gui_running')
     set ttimeoutlen=10
 
     let g:lightline = {
-    \   'colorscheme': 'base16_default_256_terminal',
+    \   'colorscheme': 'gruvbox',
     \   'active': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
@@ -210,7 +205,9 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
 
-    colorscheme base16-default
+    let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+    let g:gruvbox_contrast_dark = 'medium'
+    colorscheme gruvbox
 
     let &colorcolumn="80,100,120"
 
@@ -222,8 +219,7 @@ if &t_Co >= 256 || has('gui_running')
 
 else
     "-----Basic Terminal Settings------
-    colorscheme base16-default
-    let g:airline_theme=''
+    colorscheme gruvbox
     highlight LineNr ctermfg=grey
     highlight clear SignColumn
     highlight ErrorMsg ctermbg=red

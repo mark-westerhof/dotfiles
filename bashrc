@@ -1,17 +1,19 @@
-# Terminal
-[[ -f $HOME/.base16_shell.sh ]] && . $HOME/.base16_shell.sh
-if [[ -n "$TMUX" ]]; then
-    if [[ $(tmux showenv TERM 2>/dev/null) =~ .*256color ]]; then
-        export TERM='screen-256color'
-    else
-        export TERM='screen'
-    fi
-fi
-
+# Path
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
 
-export EDITOR=vim
+# Apperance
+. "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
+
+# Editor
+editor='vim'
+if command -v nvim >/dev/null 2>&1; then
+    editor='nvim'
+    alias vim='nvim'
+fi
+export EDITOR=$editor
+
+# FOS env
 export USESUDO=$(which sudo)
 
 # fzf
