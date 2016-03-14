@@ -19,7 +19,7 @@ Plug 'heavenshell/vim-jsdoc'
 Plug 'wavded/vim-stylus'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'scrooloose/syntastic', {'tag': '3.7.0'}
+Plug 'benekastah/neomake'
 
 if &t_Co >= 256 || has('gui_running')
     Plug 'itchyny/lightline.vim'
@@ -134,7 +134,7 @@ if &t_Co >= 256 || has('gui_running')
     \   'active': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
-    \       'right': [ ['syntastic', 'lineinfo'],
+    \       'right': [ ['neomake', 'lineinfo'],
     \                  ['percent'],
     \                  ['fileformat', 'fileencoding', 'filetype'] ]
     \   },
@@ -148,10 +148,10 @@ if &t_Co >= 256 || has('gui_running')
     \       'lineinfo': 'LightLineLineInfo'
     \   },
     \   'component_expand': {
-    \       'syntastic': 'SyntasticStatuslineFlag'
+    \       'neomake': 'LightLineNeomake'
     \   },
     \   'component_type': {
-    \       'syntastic': 'error'
+    \       'neomake': 'error'
     \   },
     \   'separator': { 'left': '', 'right': ''},
     \   'subseparator': { 'left': '', 'right': ''}
@@ -204,6 +204,19 @@ if &t_Co >= 256 || has('gui_running')
         return ' ' . printf('%3d:%-2d', line('.'), col('.'))
     endfunction
 
+    function! LightLineNeomake()
+        let total = 0
+        for v in values(neomake#statusline#LoclistCounts())
+            let total += v
+        endfor
+        for v in items(neomake#statusline#QflistCounts())
+            let total += v
+        endfor
+        if total == 0
+            return ''
+        endif
+        return total . ' lint issues'
+    endfunction
 
     let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
     let g:gruvbox_contrast_dark = 'medium'
@@ -263,7 +276,6 @@ let g:airline#extensions#tabline#enabled = 1
 let g:tmuxline_powerline_separators = 1
 let g:tmuxline_preset = {
 \   'a'    : '#S',
-\   'b'    : '#W',
 \   'win'  : '#I #W',
 \   'cwin' : '#I #W',
 \   'x'    : '%R',
@@ -276,23 +288,34 @@ nnoremap <F3> :TagbarToggle<CR>
 let g:tagbar_sort = 0
 
 "Linting
-let g:syntastic_mode_map = { 'mode': 'passive' }
-let g:syntastic_enable_highlighting = 0
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_javascript_checkers = ['jscs', 'jshint']
-let g:syntastic_ignore_files = ['.*\.json', '.*migadmin/lang/.*\.js']
+let g:neomake_verbose = 0
+let g:neomake_serialize = 1
+let g:neomake_airline = 0
+let g:neomake_javascript_enabled_makers = ['jscs', 'jshint']
+let g:neomake_python_enabled_makers = ['flake8']
+let g:neomake_error_sign = {
+\   'text': '✘',
+\   'texthl': 'GruvboxRedSign'
+\}
+let g:neomake_warning_sign = {
+\   'text': '⚠',
+\   'texthl': 'GruvboxYellowSign'
+\ }
 
-function! g:SyntaxCheck()
-    SyntasticCheck
+function! g:LintStatusUpdate()
     call lightline#update()
+    if neomake#statusline#LoclistStatus() != ""
+        call lightline#update()
+    endif
 endfunction
 
-augroup AutoSyntastic
+augroup AutoLint
     autocmd!
-    autocmd BufWritePost * call g:SyntaxCheck()
+    autocmd BufWritePost * Neomake
+    autocmd BufWinEnter,CursorHold * call g:LintStatusUpdate()
 augroup END
 
-nnoremap <silent> <Leader>sc :call g:SyntaxCheck()<CR>
+nnoremap <silent> <Leader>sc :Neomake<CR>
 
 "Easymotion
 let g:EasyMotion_leader_key = '<Leader>'
