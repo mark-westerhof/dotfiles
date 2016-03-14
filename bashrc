@@ -7,7 +7,7 @@
 
 # "Ctrl h" fix https://github.com/neovim/neovim/issues/2048
 if [[ -f "$HOME/$TERM.ti" ]]; then
-    tic $TERM.ti
+    tic $HOME/$TERM.ti
 fi
 
 # Editor
