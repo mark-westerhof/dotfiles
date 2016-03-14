@@ -5,6 +5,11 @@
 # Apperance
 . "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
 
+# "Ctrl h" fix https://github.com/neovim/neovim/issues/2048
+if [[ -f "$HOME/$TERM.ti" ]]; then
+    tic $TERM.ti
+fi
+
 # Editor
 editor='vim'
 if command -v nvim >/dev/null 2>&1; then
