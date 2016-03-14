@@ -265,6 +265,15 @@ let g:airline#extensions#tabline#enabled = 1
 
 "Tmuxline
 let g:tmuxline_powerline_separators = 1
+let g:tmuxline_preset = {
+\   'a'    : '#S',
+\   'b'    : '#W',
+\   'win'  : '#I #W',
+\   'cwin' : '#I #W',
+\   'x'    : '%R',
+\   'y'    : '%b %d, %Y',
+\   'z'    : '#H'
+\}
 
 "Taglist Bar
 nnoremap <F3> :TagbarToggle<CR>
