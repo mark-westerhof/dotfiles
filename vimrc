@@ -5,6 +5,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'morhetz/gruvbox'
 Plug 'tomtom/tcomment_vim'
+Plug 'Yggdroot/indentLine'
 Plug 'majutsushi/tagbar'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
@@ -311,7 +312,7 @@ endfunction
 
 augroup AutoLint
     autocmd!
-    autocmd BufWritePost * Neomake
+    autocmd BufWritePost *.py *.js Neomake
     autocmd BufWinEnter,CursorHold * call g:LintStatusUpdate()
 augroup END
 
