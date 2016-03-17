@@ -33,10 +33,17 @@ if [ -f "$HOME/.nvm/nvm.sh" ]; then
     export NODE_PATH=$(npm root -g)
 fi
 
-# Aliases
+# SSH/clipboard aliases
+alias ssh_clip_support='ssh -R 6788:localhost:22'
+alias remoteclip='ssh -p 6788 localhost pbcopy'
+alias vim_clip='cat /tmp/vim_clipboard'
+
+# FOS aliases
 alias fortigate='fgtdev conf get fortigate | awk -F ": " "{print \$2}"'
 alias fortigate_port='fgtdev conf get ssh_port | awk -F ": " "{print \$2}"'
 alias sshfgt='ssh -p $(fortigate_port) admin@$(fortigate)'
+
+# Development aliases
 alias createtags='git ls-files | grep -v -E "^linux-" | ctags -R -L -'
 alias gpush='git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)'
 
