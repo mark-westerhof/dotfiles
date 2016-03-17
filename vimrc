@@ -171,7 +171,7 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     function! LightLineFugitive()
-        if exists("*fugitive#head") && winwidth(0) > s:lightline_wrap1
+        if exists('*fugitive#head') && winwidth(0) > s:lightline_wrap1
             let _ = fugitive#head()
             return strlen(_) ? ' '._ : ''
         endif
@@ -206,6 +206,10 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     function! LightLineNeomake()
+        if !exists('*neomake#statusline#LoclistCounts')
+            return ''
+        endif
+
         let total = 0
         for v in values(neomake#statusline#LoclistCounts())
             let total += v
@@ -304,8 +308,7 @@ let g:neomake_warning_sign = {
 \ }
 
 function! g:LintStatusUpdate()
-    call lightline#update()
-    if neomake#statusline#LoclistStatus() != ""
+    if exists('*neomake#statusline#LoclistStatus') && neomake#statusline#LoclistStatus() != ""
         call lightline#update()
     endif
 endfunction
