@@ -20,7 +20,7 @@ Plug 'heavenshell/vim-jsdoc'
 Plug 'wavded/vim-stylus'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'benekastah/neomake'
+Plug 'scrooloose/syntastic'
 
 if &t_Co >= 256 || has('gui_running')
     Plug 'itchyny/lightline.vim'
@@ -46,6 +46,7 @@ set backspace=2
 "Turn off some features
 set nospell
 set nohlsearch
+set mouse=
 
 "stfu
 set visualbell
@@ -66,12 +67,24 @@ nnoremap <Leader>rtw :%s/\s\+$//e<CR>
 "Exit insert mode
 inoremap jk <Esc>
 
+"Better split behaviour
+set splitbelow
+set splitright
+
 "Window navigation
-nnoremap <C-i> :wincmd h <CR>
-nnoremap <C-h> :wincmd h <CR>
-nnoremap <C-j> :wincmd j <CR>
-nnoremap <C-k> :wincmd k <CR>
-nnoremap <C-l> :wincmd l <CR>
+nnoremap <C-h> :wincmd h<CR>
+nnoremap <C-j> :wincmd j<CR>
+nnoremap <C-k> :wincmd k<CR>
+nnoremap <C-l> :wincmd l<CR>
+
+"Terminal window navigation
+if has('nvim')
+    nnoremap <C-w>% :vsp <CR>:terminal<CR>
+    nnoremap <C-w>" :sp <CR>:terminal<CR>
+
+    tnoremap <Esc> <C-\><C-n>
+    tnoremap <C-[> <C-\><C-n>
+endif
 
 "Tab navigation
 nnoremap <silent> th :tabfirst<CR>
@@ -94,8 +107,9 @@ nnoremap fd :bp<bar>sp<bar>bn<bar>bd<CR>
 nnoremap <Leader>o :only<CR>
 nnoremap <Leader>r :redraw!<CR>
 
-"Copy pasting between vim instances
+"Copy pasting between vim instances and remote clipboard
 vnoremap <leader>y :w! /tmp/vim_clipboard<CR>
+vnoremap <leader>r :w !ssh -p 6788 localhost pbcopy<CR>
 nnoremap <leader>p :r! cat /tmp/vim_clipboard<CR>
 
 "vimrc
@@ -104,10 +118,6 @@ nnoremap <Leader>sv :source $MYVIMRC<CR>
 
 "Find and replace selected
 vnoremap <C-r> "hy:.,$s/<C-r>h//gc<left><left><left>
-
-"fgtdev
-nnoremap <Leader>fu :execute '!fgtdev up '.expand('%s')<CR>
-
 
 "}}}
 
@@ -135,7 +145,7 @@ if &t_Co >= 256 || has('gui_running')
     \   'active': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
-    \       'right': [ ['neomake', 'lineinfo'],
+    \       'right': [ ['syntastic', 'lineinfo'],
     \                  ['percent'],
     \                  ['fileformat', 'fileencoding', 'filetype'] ]
     \   },
@@ -149,10 +159,10 @@ if &t_Co >= 256 || has('gui_running')
     \       'lineinfo': 'LightLineLineInfo'
     \   },
     \   'component_expand': {
-    \       'neomake': 'LightLineNeomake'
+    \       'syntastic': 'SyntasticStatuslineFlag'
     \   },
     \   'component_type': {
-    \       'neomake': 'error'
+    \       'syntastic': 'error'
     \   },
     \   'separator': { 'left': '', 'right': ''},
     \   'subseparator': { 'left': '', 'right': ''}
@@ -180,12 +190,18 @@ if &t_Co >= 256 || has('gui_running')
 
     function! LightLineFilename()
         let fname = expand('%')
+        if fname =~ 'term://'
+            return ''
+        endif
         return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
             \ ('' != fname ? (winwidth(0) > s:lightline_wrap3 ? fname : expand('%:t')) : '[No Name]') .
             \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
     endfunction
 
     function! LightLineFileFormat()
+        if expand('%') =~ 'term://'
+            return ''
+        endif
         return winwidth(0) > s:lightline_wrap2 ? &fileformat : ''
     endfunction
 
@@ -194,6 +210,9 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     function! LightLineFileEncoding()
+        if expand('%') =~ 'term://'
+            return ''
+        endif
         return winwidth(0) > s:lightline_wrap2 ? (strlen(&fenc) ? &fenc : &enc) : ''
     endfunction
 
@@ -203,24 +222,6 @@ if &t_Co >= 256 || has('gui_running')
 
     function! LightLineLineInfo()
         return ' ' . printf('%3d:%-2d', line('.'), col('.'))
-    endfunction
-
-    function! LightLineNeomake()
-        if !exists('*neomake#statusline#LoclistCounts')
-            return ''
-        endif
-
-        let total = 0
-        for v in values(neomake#statusline#LoclistCounts())
-            let total += v
-        endfor
-        for v in items(neomake#statusline#QflistCounts())
-            let total += v
-        endfor
-        if total == 0
-            return ''
-        endif
-        return total . ' lint issues'
     endfunction
 
     let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
@@ -266,7 +267,7 @@ if has('cscope')
 endif
 
 "Open tag in vsplit
-nnoremap <Leader>] :rightb vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+nnoremap <Leader>] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 "}}}
 
 "Basic Plugin Configuration {{{
@@ -293,33 +294,27 @@ nnoremap <F3> :TagbarToggle<CR>
 let g:tagbar_sort = 0
 
 "Linting
-let g:neomake_verbose = 0
-let g:neomake_serialize = 1
-let g:neomake_airline = 0
-let g:neomake_javascript_enabled_makers = ['jscs', 'jshint']
-let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_error_sign = {
-\   'text': '✘',
-\   'texthl': 'GruvboxRedSign'
-\}
-let g:neomake_warning_sign = {
-\   'text': '⚠',
-\   'texthl': 'GruvboxYellowSign'
-\ }
+let g:syntastic_mode_map = { 'mode': 'passive' }
+let g:syntastic_enable_highlighting = 0
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_error_symbol = "✗"
+let g:syntastic_style_error_symbol = "✗"
+let g:syntastic_warning_symbol = "⚠"
+let g:syntastic_style_warning_symbol = "⚠"
+let g:syntastic_javascript_checkers = ['jscs', 'jshint']
+let g:syntastic_ignore_files = ['.*\.json', '.*migadmin/lang/.*\.js']
 
-function! g:LintStatusUpdate()
-    if exists('*neomake#statusline#LoclistStatus') && neomake#statusline#LoclistStatus() != ""
-        call lightline#update()
-    endif
+function! g:SyntaxCheck()
+    SyntasticCheck
+    call lightline#update()
 endfunction
 
-augroup AutoLint
+augroup AutoSyntastic
     autocmd!
-    autocmd BufWritePost *.py *.js Neomake
-    autocmd BufWinEnter,CursorHold * call g:LintStatusUpdate()
+    autocmd BufWritePost * call g:SyntaxCheck()
 augroup END
 
-nnoremap <silent> <Leader>sc :Neomake<CR>
+nnoremap <silent> <Leader>sc :call g:SyntaxCheck()<CR>
 
 "Easymotion
 let g:EasyMotion_leader_key = '<Leader>'
@@ -341,7 +336,6 @@ nnoremap <Space>t :BTags<CR>
 
 "Fugitive
 nnoremap <Space>/ :Ggrep<Space>
-nnoremap <Leader>gs :Gstatus<CR>
 nnoremap <Leader>gd :Gdiff HEAD<CR>
 vnoremap <C-g> "hy:tabedit %<CR>:Ggrep <C-r>h
 

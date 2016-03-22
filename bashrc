@@ -36,7 +36,6 @@ fi
 # SSH/clipboard aliases
 alias ssh_clip_support='ssh -R 6788:localhost:22'
 alias remoteclip='ssh -p 6788 localhost pbcopy'
-alias vim_clip='cat /tmp/vim_clipboard'
 
 # FOS aliases
 alias fortigate='fgtdev conf get fortigate | awk -F ": " "{print \$2}"'
