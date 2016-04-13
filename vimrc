@@ -21,6 +21,7 @@ Plug 'wavded/vim-stylus'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'scrooloose/syntastic'
+Plug 'pangloss/vim-javascript'
 
 if &t_Co >= 256 || has('gui_running')
     Plug 'itchyny/lightline.vim'
@@ -125,7 +126,7 @@ vnoremap <C-r> "hy:.,$s/<C-r>h//gc<left><left><left>
 
 "Lightline
 if &t_Co >= 256 || has('gui_running')
-    set background=dark
+    set background=light
 
     if has('gui_running')
         "Gvim
@@ -225,7 +226,6 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
-    let g:gruvbox_contrast_dark = 'medium'
     colorscheme gruvbox
 
     let &colorcolumn="80,100,120"
