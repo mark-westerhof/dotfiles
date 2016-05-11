@@ -289,6 +289,9 @@ let g:tmuxline_preset = {
 \   'z'    : '#H'
 \}
 
+"Vim-tmux-navigator
+let g:tmux_navigator_no_mappings = 1
+
 "Taglist Bar
 nnoremap <F3> :TagbarToggle<CR>
 let g:tagbar_sort = 0
