@@ -5,6 +5,7 @@ CHECKOUT_PATH=`pwd`
 popd > /dev/null
 
 ln -sf $CHECKOUT_PATH/bashrc ~/.bashrc
+ln -sf $CHECKOUT_PATH/base16-default.dark.sh ~/.shell_theme.sh
 ln -sf $CHECKOUT_PATH/tmux.conf ~/.tmux.conf
 
 mkdir -p ~/.config

@@ -3,7 +3,8 @@
 "Plugins{{{
 call plug#begin('~/.vim/plugged')
 
-Plug 'morhetz/gruvbox'
+Plug 'chriskempson/base16-vim'
+Plug 'felixjung/vim-base16-lightline'
 Plug 'tomtom/tcomment_vim'
 Plug 'Yggdroot/indentLine'
 Plug 'majutsushi/tagbar'
@@ -25,7 +26,6 @@ Plug 'pangloss/vim-javascript'
 
 if &t_Co >= 256 || has('gui_running')
     Plug 'itchyny/lightline.vim'
-    Plug 'edkolev/tmuxline.vim'
 endif
 
 call plug#end()
@@ -126,7 +126,7 @@ vnoremap <C-r> "hy:.,$s/<C-r>h//gc<left><left><left>
 
 "Lightline
 if &t_Co >= 256 || has('gui_running')
-    set background=light
+    set background=dark
 
     if has('gui_running')
         "Gvim
@@ -142,7 +142,7 @@ if &t_Co >= 256 || has('gui_running')
     set ttimeoutlen=10
 
     let g:lightline = {
-    \   'colorscheme': 'gruvbox',
+    \   'colorscheme': 'base16_default',
     \   'active': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
@@ -226,7 +226,7 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
-    colorscheme gruvbox
+    colorscheme base16-default
 
     let &colorcolumn="80,100,120"
 
@@ -238,7 +238,7 @@ if &t_Co >= 256 || has('gui_running')
 
 else
     "-----Basic Terminal Settings------
-    colorscheme gruvbox
+    colorscheme base16-default
     highlight LineNr ctermfg=grey
     highlight clear SignColumn
     highlight ErrorMsg ctermbg=red
@@ -271,23 +271,6 @@ nnoremap <Leader>] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 "}}}
 
 "Basic Plugin Configuration {{{
-
-"Airline
-let g:airline_left_sep=''
-let g:airline_right_sep=''
-let g:airline#extensions#tagbar#enabled = 0
-let g:airline#extensions#tabline#enabled = 1
-
-"Tmuxline
-let g:tmuxline_powerline_separators = 1
-let g:tmuxline_preset = {
-\   'a'    : '#S',
-\   'win'  : '#I #W',
-\   'cwin' : '#I #W',
-\   'x'    : '%R',
-\   'y'    : '%b %d, %Y',
-\   'z'    : '#H'
-\}
 
 "Vim-tmux-navigator
 let g:tmux_navigator_no_mappings = 1

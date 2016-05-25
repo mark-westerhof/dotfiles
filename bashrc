@@ -2,8 +2,10 @@
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
 
-# Apperance
-. "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
+# Theme
+if [ -f $HOME/.shell_theme.sh ]; then
+    . $HOME/.shell_theme.sh
+fi
 
 # "Ctrl h" fix https://github.com/neovim/neovim/issues/2048
 if [[ -f "$HOME/$TERM.ti" ]]; then
@@ -45,6 +47,13 @@ alias sshfgt='ssh -p $(fortigate_port) admin@$(fortigate)'
 # Development aliases
 alias createtags='git ls-files | grep -v -E "^linux-" | ctags -R -L -'
 alias gpush='git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)'
+
+# Print 256 colors
+function printcolors() {
+    for i in {0..255} ; do
+        printf "\x1b[38;5;${i}mcolour${i}\n";
+    done
+}
 
 # Development tmux helper
 function devsession() {
