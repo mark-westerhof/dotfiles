@@ -4,9 +4,13 @@ pushd `dirname $0` > /dev/null
 CHECKOUT_PATH=`pwd`
 popd > /dev/null
 
+BASE_16_URI='https://raw.githubusercontent.com/chriskempson/base16-shell/master'
+BASE_16_THEME='ocean'
+
 ln -sf $CHECKOUT_PATH/bashrc ~/.bashrc
-ln -sf $CHECKOUT_PATH/base16-default.dark.sh ~/.shell_theme.sh
 ln -sf $CHECKOUT_PATH/tmux.conf ~/.tmux.conf
+
+wget $BASE_16_URI/base16-$BASE_16_THEME.dark.sh -O ~/.shell_theme.sh
 
 mkdir -p ~/.config
 mkdir -p ~/.vim

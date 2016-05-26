@@ -48,11 +48,16 @@ alias sshfgt='ssh -p $(fortigate_port) admin@$(fortigate)'
 alias createtags='git ls-files | grep -v -E "^linux-" | ctags -R -L -'
 alias gpush='git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)'
 
-# Print 256 colors
+# Print 256 color map for reference
 function printcolors() {
-    for i in {0..255} ; do
-        printf "\x1b[38;5;${i}mcolour${i}\n";
+    n=${1-16}
+    for i in {0..255}; do
+        printf "\e[48;05;%sm  %-3s  " $i $i
+        if [[ $((($i + 1) % $n)) == 0 ]]; then
+            printf "\n"
+        fi
     done
+    echo -e "\e[m"
 }
 
 # Development tmux helper

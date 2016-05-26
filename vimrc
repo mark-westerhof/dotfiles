@@ -142,7 +142,7 @@ if &t_Co >= 256 || has('gui_running')
     set ttimeoutlen=10
 
     let g:lightline = {
-    \   'colorscheme': 'base16_default',
+    \   'colorscheme': 'base16_ocean',
     \   'active': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
@@ -226,7 +226,7 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
-    colorscheme base16-default
+    colorscheme base16-ocean
 
     let &colorcolumn="80,100,120"
 
@@ -238,7 +238,7 @@ if &t_Co >= 256 || has('gui_running')
 
 else
     "-----Basic Terminal Settings------
-    colorscheme base16-default
+    colorscheme base16-ocean
     highlight LineNr ctermfg=grey
     highlight clear SignColumn
     highlight ErrorMsg ctermbg=red
