@@ -20,6 +20,10 @@ if command -v nvim >/dev/null 2>&1; then
 fi
 export EDITOR=$editor
 
+# History
+export HISTSIZE=1000
+export HISTCONTROL=erasedups
+
 # FOS env
 export USESUDO=$(which sudo)
 

@@ -41,12 +41,13 @@ set expandtab
 set nosmartindent
 set number
 syntax on
+set ignorecase
+set smartcase
 set nowrap
-set backspace=2
+set backspace=indent,eol,start
 
 "Turn off some features
 set nospell
-set nohlsearch
 set mouse=
 
 "stfu
@@ -58,6 +59,9 @@ set virtualedit=all
 
 "Remap leader
 let mapleader = ","
+
+"Clear search highlight when esc is pressed
+nnoremap <silent> <esc> :noh<cr><esc>
 
 "Show tabs and trailing whitespace
 set list lcs=trail:·,tab:»·
@@ -127,15 +131,6 @@ vnoremap <C-r> "hy:.,$s/<C-r>h//gc<left><left><left>
 "Lightline
 if &t_Co >= 256 || has('gui_running')
     set background=dark
-
-    if has('gui_running')
-        "Gvim
-        set guifont=Hack\ 11
-        set guioptions-=m  "menu bar
-        set guioptions-=T  "toolbar
-        set guioptions-=r  "right scrollbar
-        set guioptions-=L  "left scrollbar
-    endif
 
     set laststatus=2
     set noshowmode
@@ -225,7 +220,26 @@ if &t_Co >= 256 || has('gui_running')
         return ' ' . printf('%3d:%-2d', line('.'), col('.'))
     endfunction
 
-    let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+    if has('nvim')
+        let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+        let g:terminal_color_0 = '#2b303b'
+        let g:terminal_color_1 = '#bd626b'
+        let g:terminal_color_2 = '#a4bd8e'
+        let g:terminal_color_3 = '#eaca8f'
+        let g:terminal_color_4 = '#90a1b2'
+        let g:terminal_color_5 = '#b38fac'
+        let g:terminal_color_6 = '#97b5b4'
+        let g:terminal_color_7 = '#c0c5ce'
+        let g:terminal_color_8 = '#65737d'
+        let g:terminal_color_9 = '#bd626b'
+        let g:terminal_color_10 = '#a4bd8e'
+        let g:terminal_color_11 = '#eaca8f'
+        let g:terminal_color_12 = '#90a1b2'
+        let g:terminal_color_13 = '#b38fac'
+        let g:terminal_color_14 = '#97b5b4y'
+        let g:terminal_color_15 = '#eff1f5'
+    endif
+
     colorscheme base16-ocean
 
     let &colorcolumn="80,100,120"
@@ -238,7 +252,7 @@ if &t_Co >= 256 || has('gui_running')
 
 else
     "-----Basic Terminal Settings------
-    colorscheme base16-ocean
+    colorscheme desert
     highlight LineNr ctermfg=grey
     highlight clear SignColumn
     highlight ErrorMsg ctermbg=red
@@ -309,15 +323,6 @@ nnoremap <silent> <Leader>sc :call g:SyntaxCheck()<CR>
 
 "Easymotion
 let g:EasyMotion_leader_key = '<Leader>'
-let g:EasyMotion_smartcase = 1
-map / <Plug>(easymotion-sn)
-omap / <Plug>(easymotion-tn)
-map n <Plug>(easymotion-next)
-map N <Plug>(easymotion-prev)
-hi link EasyMotionTarget ErrorMsg
-hi link EasyMotionShade Comment
-hi link EasyMotionTarget2First ErrorMsg
-hi link EasyMotionTarget2Second ErrorMsg
 
 "fzf
 nnoremap <Space>p :Files<CR>
