@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
 
-pushd `dirname $0` > /dev/null
-CHECKOUT_PATH=`pwd`
-popd > /dev/null
-
+CHECKOUT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BASE_16_URI='https://raw.githubusercontent.com/chriskempson/base16-shell/master'
 BASE_16_THEME='ocean'
 
-ln -sf $CHECKOUT_PATH/bashrc ~/.bashrc
 ln -sf $CHECKOUT_PATH/tmux.conf ~/.tmux.conf
+
+if [ "$(uname)" == "Darwin" ]; then
+    cp $CHECKOUT_PATH/bashrc_osx ~/.bashrc
+    echo -e "\n. $CHECKOUT_PATH/bashrc" >> ~/.bashrc
+    echo '[ -f "$HOME/.bashrc" ] && . $HOME/.bashrc' > ~/.bash_profile
+    ln -sf $CHECKOUT_PATH/tmux_osx.conf ~/.tmux_osx.conf
+else
+    ln -sf $CHECKOUT_PATH/bashrc ~/.bashrc
+fi
 
 wget $BASE_16_URI/base16-$BASE_16_THEME.dark.sh -O ~/.shell_theme.sh
 
@@ -17,8 +22,3 @@ mkdir -p ~/.vim
 ln -sf $CHECKOUT_PATH/vimrc ~/.vimrc
 ln -sf ~/.vim ~/.config/nvim
 ln -sf $CHECKOUT_PATH/vimrc ~/.config/nvim/init.vim
-
-if [ "$(uname)" == "Darwin" ]; then
-    ln -sf $CHECKOUT_PATH/bash_profile_osx ~/.bash_profile
-    ln -sf $CHECKOUT_PATH/tmux_osx.conf ~/.tmux_osx.conf
-fi
