@@ -39,9 +39,13 @@ if [ -f "$HOME/.nvm/nvm.sh" ]; then
     export NODE_PATH=$(npm root -g)
 fi
 
-# SSH/clipboard aliases
+# SSH/clipboard
 alias ssh_clip_support='ssh -R 6788:localhost:22'
 alias remoteclip='ssh -p 6788 localhost pbcopy'
+
+function remotesend() {
+    scp -P 6788 $1 localhost:~/Downloads
+}
 
 # FOS aliases
 alias fortigate='fgtdev conf get fortigate | awk -F ": " "{print \$2}"'
