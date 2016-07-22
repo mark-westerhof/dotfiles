@@ -41,13 +41,12 @@ set expandtab
 set nosmartindent
 set number
 syntax on
-set ignorecase
-set smartcase
 set nowrap
 set backspace=indent,eol,start
 
 "Turn off some features
 set nospell
+set nohlsearch
 set mouse=
 
 "stfu
@@ -323,6 +322,11 @@ nnoremap <silent> <Leader>sc :call g:SyntaxCheck()<CR>
 
 "Easymotion
 let g:EasyMotion_leader_key = '<Leader>'
+let g:EasyMotion_smartcase = 1
+map / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+map n <Plug>(easymotion-next)
+map N <Plug>(easymotion-prev)
 
 "fzf
 nnoremap <Space>p :Files<CR>
