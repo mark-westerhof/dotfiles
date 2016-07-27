@@ -3,6 +3,10 @@
 "Plugins{{{
 call plug#begin('~/.vim/plugged')
 
+function! DoRemote(arg)
+    UpdateRemotePlugins
+endfunction
+
 Plug 'chriskempson/base16-vim'
 Plug 'felixjung/vim-base16-lightline'
 Plug 'tomtom/tcomment_vim'
@@ -10,7 +14,9 @@ Plug 'Yggdroot/indentLine'
 Plug 'majutsushi/tagbar'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
-Plug 'Valloric/YouCompleteMe', {'do': './install.py --tern-completer'}
+Plug 'Shougo/deoplete.nvim', {'do': function('DoRemote')}
+Plug 'carlitux/deoplete-ternjs'
+Plug 'zchee/deoplete-jedi'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 Plug 'airblade/vim-gitgutter'
@@ -342,12 +348,16 @@ vnoremap <C-g> "hy:tabedit %<CR>:Ggrep <C-r>h
 "Git Gutter
 let g:gitgutter_max_signs = 10000
 
-"YouCompleteMe
+"Deoplete
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
 set completeopt-=preview
-"FortiOS has too many tags
-let g:ycm_filetype_specific_completion_to_disable = {
-    \ 'c': 1
-\}
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<tab>"
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function() abort
+    return deoplete#close_popup() . "\<CR>"
+endfunction
 
 "jsdoc
 let g:jsdoc_default_mapping = 0
