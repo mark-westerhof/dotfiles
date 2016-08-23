@@ -27,6 +27,7 @@ Plug 'heavenshell/vim-jsdoc'
 Plug 'wavded/vim-stylus'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'cazador481/fakeclip.neovim'
 Plug 'scrooloose/syntastic'
 Plug 'pangloss/vim-javascript'
 
@@ -226,7 +227,7 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     if has('nvim')
-        let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+        set termguicolors
         let g:terminal_color_0 = '#2b303b'
         let g:terminal_color_1 = '#bd626b'
         let g:terminal_color_2 = '#a4bd8e'
