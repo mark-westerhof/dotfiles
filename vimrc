@@ -28,7 +28,7 @@ Plug 'wavded/vim-stylus'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'cazador481/fakeclip.neovim'
-Plug 'scrooloose/syntastic'
+Plug 'w0rp/ale'
 Plug 'pangloss/vim-javascript'
 
 if &t_Co >= 256 || has('gui_running')
@@ -50,6 +50,9 @@ set number
 syntax on
 set nowrap
 set backspace=indent,eol,start
+if has('nvim')
+    set inccommand=nosplit
+endif
 
 "Turn off some features
 set nospell
@@ -128,7 +131,8 @@ nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <Leader>sv :source $MYVIMRC<CR>
 
 "Find and replace selected
-vnoremap <C-r> "hy:.,$s/<C-r>h//gc<left><left><left>
+vnoremap <C-r> "hy:.,$s/<C-r>h//g<left><left>
+vnoremap <C-s> "hy:.,$s/<C-r>h//gc<left><left><left>
 
 "}}}
 
@@ -147,7 +151,7 @@ if &t_Co >= 256 || has('gui_running')
     \   'active': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
-    \       'right': [ ['syntastic', 'lineinfo'],
+    \       'right': [ ['ale', 'lineinfo'],
     \                  ['percent'],
     \                  ['fileformat', 'fileencoding', 'filetype'] ]
     \   },
@@ -158,13 +162,13 @@ if &t_Co >= 256 || has('gui_running')
     \       'filetype': 'LightLineFileType',
     \       'fileencoding': 'LightLineFileEncoding',
     \       'mode': 'LightLineMode',
-    \       'lineinfo': 'LightLineLineInfo'
+    \       'lineinfo': 'LightLineLineInfo',
     \   },
     \   'component_expand': {
-    \       'syntastic': 'SyntasticStatuslineFlag'
+    \       'ale': 'ale#statusline#Status'
     \   },
     \   'component_type': {
-    \       'syntastic': 'error'
+    \       'ale': 'error'
     \   },
     \   'separator': { 'left': '', 'right': ''},
     \   'subseparator': { 'left': '', 'right': ''}
@@ -305,27 +309,19 @@ nnoremap <F3> :TagbarToggle<CR>
 let g:tagbar_sort = 0
 
 "Linting
-let g:syntastic_mode_map = { 'mode': 'passive' }
-let g:syntastic_enable_highlighting = 0
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_error_symbol = "✗"
-let g:syntastic_style_error_symbol = "✗"
-let g:syntastic_warning_symbol = "⚠"
-let g:syntastic_style_warning_symbol = "⚠"
-let g:syntastic_javascript_checkers = ['jscs', 'jshint']
-let g:syntastic_ignore_files = ['.*\.json', '.*migadmin/lang/.*\.js']
+let g:ale_linters = {
+\   'javascript': ['jscs', 'jshint'],
+\   'python': ['flake8']
+\}
+let g:ale_sign_error = "✗"
+let g:ale_sign_warning = '⚠'
+let g:ale_statusline_format = ['✗ (%d)', '⚠ (%d)', '']
+let g:ale_lint_delay = 1000
 
-function! g:SyntaxCheck()
-    SyntasticCheck
-    call lightline#update()
-endfunction
-
-augroup AutoSyntastic
+augroup AfterLintUpdate
     autocmd!
-    autocmd BufWritePost * call g:SyntaxCheck()
+    autocmd User ALELint call lightline#update()
 augroup END
-
-nnoremap <silent> <Leader>sc :call g:SyntaxCheck()<CR>
 
 "Easymotion
 let g:EasyMotion_leader_key = '<Leader>'
@@ -348,6 +344,7 @@ vnoremap <C-g> "hy:tabedit %<CR>:Ggrep <C-r>h
 
 "Git Gutter
 let g:gitgutter_max_signs = 10000
+let g:gitgutter_sign_column_always = 1
 
 "Deoplete
 let g:deoplete#enable_at_startup = 1
