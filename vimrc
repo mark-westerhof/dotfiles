@@ -30,6 +30,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'cazador481/fakeclip.neovim'
 Plug 'w0rp/ale'
 Plug 'pangloss/vim-javascript'
+Plug 'mhinz/vim-startify'
 
 if &t_Co >= 256 || has('gui_running')
     Plug 'itchyny/lightline.vim'
