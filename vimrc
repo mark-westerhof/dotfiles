@@ -30,7 +30,6 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'cazador481/fakeclip.neovim'
 Plug 'w0rp/ale'
 Plug 'pangloss/vim-javascript'
-Plug 'mhinz/vim-startify'
 
 if &t_Co >= 256 || has('gui_running')
     Plug 'itchyny/lightline.vim'
@@ -318,6 +317,9 @@ let g:ale_sign_error = "✗"
 let g:ale_sign_warning = '⚠'
 let g:ale_statusline_format = ['✗ (%d)', '⚠ (%d)', '']
 let g:ale_lint_delay = 1000
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
 augroup AfterLintUpdate
     autocmd!
