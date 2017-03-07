@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 CHECKOUT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BASE_16_URI='https://raw.githubusercontent.com/chriskempson/base16-shell/master'
+BASE_16_URI='https://raw.githubusercontent.com/chriskempson/base16-shell/master/scripts'
 BASE_16_THEME='ocean'
 
 ln -sf $CHECKOUT_PATH/tmux.conf ~/.tmux.conf
@@ -15,7 +15,7 @@ else
     ln -sf $CHECKOUT_PATH/bashrc ~/.bashrc
 fi
 
-wget $BASE_16_URI/base16-$BASE_16_THEME.dark.sh -O ~/.shell_theme.sh
+wget $BASE_16_URI/base16-$BASE_16_THEME.sh -O ~/.shell_theme.sh
 
 mkdir -p ~/.config
 mkdir -p ~/.vim
