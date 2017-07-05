@@ -10,7 +10,6 @@ endfunction
 Plug 'chriskempson/base16-vim'
 Plug 'felixjung/vim-base16-lightline'
 Plug 'tomtom/tcomment_vim'
-Plug 'Yggdroot/indentLine'
 Plug 'majutsushi/tagbar'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
@@ -321,6 +320,10 @@ let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
+let g:ale_pattern_options = {
+\   '.*migadmin/lang/.*\.js$': {'ale_enabled': 0}
+\}
+
 augroup AfterLintUpdate
     autocmd!
     autocmd User ALELint call lightline#update()
@@ -344,6 +347,9 @@ nnoremap <Space>t :BTags<CR>
 nnoremap <Space>/ :Ggrep<Space>
 nnoremap <Leader>gd :Gdiff HEAD<CR>
 vnoremap <C-g> "hy:tabedit %<CR>:Ggrep <C-r>h
+
+"Javscript
+let g:javascript_plugin_jsdoc = 1
 
 "Git Gutter
 let g:gitgutter_max_signs = 10000
