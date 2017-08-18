@@ -54,7 +54,6 @@ if has('nvim')
 endif
 
 "Turn off some features
-set nospell
 set nohlsearch
 set mouse=
 
@@ -353,7 +352,7 @@ let g:javascript_plugin_jsdoc = 1
 
 "Git Gutter
 let g:gitgutter_max_signs = 10000
-let g:gitgutter_sign_column_always = 1
+set signcolumn=yes
 
 "Deoplete
 let g:deoplete#enable_at_startup = 1
