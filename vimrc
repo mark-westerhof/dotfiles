@@ -309,7 +309,8 @@ let g:tagbar_sort = 0
 "Linting
 let g:ale_linters = {
 \   'javascript': ['jscs', 'jshint'],
-\   'python': ['flake8']
+\   'python': ['flake8'],
+\   'html': []
 \}
 let g:ale_sign_error = "✗"
 let g:ale_sign_warning = '⚠'
