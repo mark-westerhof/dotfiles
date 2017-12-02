@@ -8,7 +8,7 @@ function! DoRemote(arg)
 endfunction
 
 Plug 'chriskempson/base16-vim'
-Plug 'felixjung/vim-base16-lightline'
+Plug 'mark-westerhof/vim-lightline-base16'
 Plug 'tomtom/tcomment_vim'
 Plug 'majutsushi/tagbar'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
@@ -145,8 +145,9 @@ if &t_Co >= 256 || has('gui_running')
     set noshowmode
     set ttimeoutlen=10
 
+    let base16_theme = 'base16-' . $BASE_16_THEME
+
     let g:lightline = {
-    \   'colorscheme': 'base16_ocean',
     \   'active': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
@@ -172,6 +173,7 @@ if &t_Co >= 256 || has('gui_running')
     \   'separator': { 'left': '', 'right': ''},
     \   'subseparator': { 'left': '', 'right': ''}
     \}
+    let g:lightline.colorscheme = substitute(base16_theme, '-', '_', 'g')
 
     let s:lightline_wrap1 = 120
     let s:lightline_wrap2 = 80
@@ -233,7 +235,7 @@ if &t_Co >= 256 || has('gui_running')
         set termguicolors
     endif
 
-    colorscheme base16-ocean
+    execute 'colorscheme' base16_theme
 
     let &colorcolumn="80,100,120"
 
