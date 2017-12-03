@@ -3,30 +3,35 @@
 "Plugins{{{
 call plug#begin('~/.vim/plugged')
 
+function! DoRemote(arg)
+    UpdateRemotePlugins
+endfunction
+
 Plug 'chriskempson/base16-vim'
+Plug 'mark-westerhof/vim-lightline-base16'
 Plug 'tomtom/tcomment_vim'
 Plug 'majutsushi/tagbar'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
-Plug 'Valloric/YouCompleteMe', {'do': './install.py --tern-completer'}
+Plug 'Shougo/deoplete.nvim', {'do': function('DoRemote')}
+Plug 'carlitux/deoplete-ternjs'
+Plug 'zchee/deoplete-jedi'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 Plug 'airblade/vim-gitgutter'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
-Plug 'jelera/vim-javascript-syntax'
-Plug 'pangloss/vim-javascript'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'wavded/vim-stylus'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'scrooloose/syntastic', {'tag': '3.7.0'}
+Plug 'cazador481/fakeclip.neovim'
+Plug 'w0rp/ale'
+Plug 'pangloss/vim-javascript'
 
 if &t_Co >= 256 || has('gui_running')
     Plug 'itchyny/lightline.vim'
-    Plug 'mark-westerhof/vim-base16-256-terminal-lightline'
-    Plug 'edkolev/tmuxline.vim'
 endif
 
 call plug#end()
@@ -42,12 +47,16 @@ set expandtab
 set nosmartindent
 set number
 syntax on
+set spell
 set nowrap
-set backspace=2
+set backspace=indent,eol,start
+if has('nvim')
+    set inccommand=nosplit
+endif
 
 "Turn off some features
-set nospell
 set nohlsearch
+set mouse=
 
 "stfu
 set visualbell
@@ -59,6 +68,9 @@ set virtualedit=all
 "Remap leader
 let mapleader = ","
 
+"Clear search highlight when esc is pressed
+nnoremap <silent> <esc> :noh<cr><esc>
+
 "Show tabs and trailing whitespace
 set list lcs=trail:·,tab:»·
 
@@ -68,12 +80,24 @@ nnoremap <Leader>rtw :%s/\s\+$//e<CR>
 "Exit insert mode
 inoremap jk <Esc>
 
+"Better split behaviour
+set splitbelow
+set splitright
+
 "Window navigation
-nnoremap <C-i> :wincmd h <CR>
-nnoremap <C-h> :wincmd h <CR>
-nnoremap <C-j> :wincmd j <CR>
-nnoremap <C-k> :wincmd k <CR>
-nnoremap <C-l> :wincmd l <CR>
+nnoremap <C-h> :wincmd h<CR>
+nnoremap <C-j> :wincmd j<CR>
+nnoremap <C-k> :wincmd k<CR>
+nnoremap <C-l> :wincmd l<CR>
+
+"Terminal window navigation
+if has('nvim')
+    nnoremap <C-w>% :vsp <CR>:terminal<CR>
+    nnoremap <C-w>" :sp <CR>:terminal<CR>
+
+    tnoremap <Esc> <C-\><C-n>
+    tnoremap <C-[> <C-\><C-n>
+endif
 
 "Tab navigation
 nnoremap <silent> th :tabfirst<CR>
@@ -96,8 +120,9 @@ nnoremap fd :bp<bar>sp<bar>bn<bar>bd<CR>
 nnoremap <Leader>o :only<CR>
 nnoremap <Leader>r :redraw!<CR>
 
-"Copy pasting between vim instances
+"Copy pasting between vim instances and remote clipboard
 vnoremap <leader>y :w! /tmp/vim_clipboard<CR>
+vnoremap <leader>r :w !ssh -p 6788 localhost pbcopy<CR>
 nnoremap <leader>p :r! cat /tmp/vim_clipboard<CR>
 
 "vimrc
@@ -105,11 +130,8 @@ nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <Leader>sv :source $MYVIMRC<CR>
 
 "Find and replace selected
-vnoremap <C-r> "hy:.,$s/<C-r>h//gc<left><left><left>
-
-"fgtdev
-nnoremap <Leader>fu :execute '!fgtdev up '.expand('%s')<CR>
-
+vnoremap <C-r> "hy:.,$s/<C-r>h//g<left><left>
+vnoremap <C-s> "hy:.,$s/<C-r>h//gc<left><left><left>
 
 "}}}
 
@@ -119,27 +141,17 @@ nnoremap <Leader>fu :execute '!fgtdev up '.expand('%s')<CR>
 if &t_Co >= 256 || has('gui_running')
     set background=dark
 
-    if has('gui_running')
-        "Gvim
-        set guifont=Sauce\ Code\ Powerline\ Medium\ 11
-        set guioptions-=m  "menu bar
-        set guioptions-=T  "toolbar
-        set guioptions-=r  "right scrollbar
-        set guioptions-=L  "left scrollbar
-    else
-        let base16colorspace=256
-    endif
-
     set laststatus=2
     set noshowmode
     set ttimeoutlen=10
 
+    let base16_theme = 'base16-' . $BASE_16_THEME
+
     let g:lightline = {
-    \   'colorscheme': 'base16_default_256_terminal',
     \   'active': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
-    \       'right': [ ['syntastic', 'lineinfo'],
+    \       'right': [ ['ale', 'lineinfo'],
     \                  ['percent'],
     \                  ['fileformat', 'fileencoding', 'filetype'] ]
     \   },
@@ -150,17 +162,18 @@ if &t_Co >= 256 || has('gui_running')
     \       'filetype': 'LightLineFileType',
     \       'fileencoding': 'LightLineFileEncoding',
     \       'mode': 'LightLineMode',
-    \       'lineinfo': 'LightLineLineInfo'
+    \       'lineinfo': 'LightLineLineInfo',
     \   },
     \   'component_expand': {
-    \       'syntastic': 'SyntasticStatuslineFlag'
+    \       'ale': 'ale#statusline#Status'
     \   },
     \   'component_type': {
-    \       'syntastic': 'error'
+    \       'ale': 'error'
     \   },
     \   'separator': { 'left': '', 'right': ''},
     \   'subseparator': { 'left': '', 'right': ''}
     \}
+    let g:lightline.colorscheme = substitute(base16_theme, '-', '_', 'g')
 
     let s:lightline_wrap1 = 120
     let s:lightline_wrap2 = 80
@@ -175,7 +188,7 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     function! LightLineFugitive()
-        if exists("*fugitive#head") && winwidth(0) > s:lightline_wrap1
+        if exists('*fugitive#head') && winwidth(0) > s:lightline_wrap1
             let _ = fugitive#head()
             return strlen(_) ? ' '._ : ''
         endif
@@ -184,12 +197,18 @@ if &t_Co >= 256 || has('gui_running')
 
     function! LightLineFilename()
         let fname = expand('%')
+        if fname =~ 'term://'
+            return ''
+        endif
         return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
             \ ('' != fname ? (winwidth(0) > s:lightline_wrap3 ? fname : expand('%:t')) : '[No Name]') .
             \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
     endfunction
 
     function! LightLineFileFormat()
+        if expand('%') =~ 'term://'
+            return ''
+        endif
         return winwidth(0) > s:lightline_wrap2 ? &fileformat : ''
     endfunction
 
@@ -198,6 +217,9 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     function! LightLineFileEncoding()
+        if expand('%') =~ 'term://'
+            return ''
+        endif
         return winwidth(0) > s:lightline_wrap2 ? (strlen(&fenc) ? &fenc : &enc) : ''
     endfunction
 
@@ -209,8 +231,11 @@ if &t_Co >= 256 || has('gui_running')
         return ' ' . printf('%3d:%-2d', line('.'), col('.'))
     endfunction
 
+    if has('nvim')
+        set termguicolors
+    endif
 
-    colorscheme base16-default
+    execute 'colorscheme' base16_theme
 
     let &colorcolumn="80,100,120"
 
@@ -222,8 +247,7 @@ if &t_Co >= 256 || has('gui_running')
 
 else
     "-----Basic Terminal Settings------
-    colorscheme base16-default
-    let g:airline_theme=''
+    colorscheme desert
     highlight LineNr ctermfg=grey
     highlight clear SignColumn
     highlight ErrorMsg ctermbg=red
@@ -252,51 +276,45 @@ if has('cscope')
 endif
 
 "Open tag in vsplit
-nnoremap <Leader>] :rightb vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+nnoremap <Leader>] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 "}}}
 
 "Basic Plugin Configuration {{{
 
-"Airline
-let g:airline_left_sep=''
-let g:airline_right_sep=''
-let g:airline#extensions#tagbar#enabled = 0
-let g:airline#extensions#tabline#enabled = 1
-
-"Tmuxline
-let g:tmuxline_powerline_separators = 1
-let g:tmuxline_preset = {
-\   'a'    : '#S',
-\   'b'    : '#W',
-\   'win'  : '#I #W',
-\   'cwin' : '#I #W',
-\   'x'    : '%R',
-\   'y'    : '%b %d, %Y',
-\   'z'    : '#H'
-\}
+"Vim-tmux-navigator
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
+nnoremap <silent> <c-\> :TmuxNavigatePrevious<cr>
 
 "Taglist Bar
 nnoremap <F3> :TagbarToggle<CR>
 let g:tagbar_sort = 0
 
 "Linting
-let g:syntastic_mode_map = { 'mode': 'passive' }
-let g:syntastic_enable_highlighting = 0
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_javascript_checkers = ['jscs', 'jshint']
-let g:syntastic_ignore_files = ['.*\.json', '.*migadmin/lang/.*\.js']
+let g:ale_linters = {
+\   'javascript': ['jscs', 'jshint'],
+\   'python': ['flake8'],
+\   'html': []
+\}
+let g:ale_sign_error = "✗"
+let g:ale_sign_warning = '⚠'
+let g:ale_statusline_format = ['✗ (%d)', '⚠ (%d)', '']
+let g:ale_lint_delay = 1000
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
-function! g:SyntaxCheck()
-    SyntasticCheck
-    call lightline#update()
-endfunction
+let g:ale_pattern_options = {
+\   '.*migadmin/lang/.*\.js$': {'ale_enabled': 0}
+\}
 
-augroup AutoSyntastic
+augroup AfterLintUpdate
     autocmd!
-    autocmd BufWritePost * call g:SyntaxCheck()
+    autocmd User ALELint call lightline#update()
 augroup END
-
-nnoremap <silent> <Leader>sc :call g:SyntaxCheck()<CR>
 
 "Easymotion
 let g:EasyMotion_leader_key = '<Leader>'
@@ -305,10 +323,6 @@ map / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
 map n <Plug>(easymotion-next)
 map N <Plug>(easymotion-prev)
-hi link EasyMotionTarget ErrorMsg
-hi link EasyMotionShade Comment
-hi link EasyMotionTarget2First ErrorMsg
-hi link EasyMotionTarget2Second ErrorMsg
 
 "fzf
 nnoremap <Space>p :Files<CR>
@@ -318,19 +332,26 @@ nnoremap <Space>t :BTags<CR>
 
 "Fugitive
 nnoremap <Space>/ :Ggrep<Space>
-nnoremap <Leader>gs :Gstatus<CR>
 nnoremap <Leader>gd :Gdiff HEAD<CR>
 vnoremap <C-g> "hy:tabedit %<CR>:Ggrep <C-r>h
 
+"Javscript
+let g:javascript_plugin_jsdoc = 1
+
 "Git Gutter
 let g:gitgutter_max_signs = 10000
+set signcolumn=yes
 
-"YouCompleteMe
+"Deoplete
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
 set completeopt-=preview
-"FortiOS has too many tags
-let g:ycm_filetype_specific_completion_to_disable = {
-    \ 'c': 1
-\}
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<tab>"
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function() abort
+    return deoplete#close_popup() . "\<CR>"
+endfunction
 
 "jsdoc
 let g:jsdoc_default_mapping = 0

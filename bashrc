@@ -1,17 +1,34 @@
-# Terminal
-[[ -f $HOME/.base16_shell.sh ]] && . $HOME/.base16_shell.sh
-if [[ -n "$TMUX" ]]; then
-    if [[ $(tmux showenv TERM 2>/dev/null) =~ .*256color ]]; then
-        export TERM='screen-256color'
-    else
-        export TERM='screen'
-    fi
-fi
-
+# Path
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
 
-export EDITOR=vim
+# Theme
+if [ -z $BASE_16_THEME ]; then
+    export BASE_16_THEME='ocean'
+    shell_theme=$HOME/.base16_themes/base16-$BASE_16_THEME.sh
+    if [ -f $shell_theme ]; then
+        . $shell_theme
+    fi
+fi
+
+# "Ctrl h" fix https://github.com/neovim/neovim/issues/2048
+if [[ -f "$HOME/$TERM.ti" ]]; then
+    tic $HOME/$TERM.ti
+fi
+
+# Editor
+editor='vim'
+if command -v nvim >/dev/null 2>&1; then
+    editor='nvim'
+    alias vim='nvim'
+fi
+export EDITOR=$editor
+
+# History
+export HISTSIZE=1000
+export HISTCONTROL=erasedups
+
+# FOS env
 export USESUDO=$(which sudo)
 
 # fzf
@@ -26,12 +43,34 @@ if [ -f "$HOME/.nvm/nvm.sh" ]; then
     export NODE_PATH=$(npm root -g)
 fi
 
-# Aliases
+# SSH/clipboard
+alias ssh_clip_support="ssh -R 6788:localhost:22"
+alias remoteclip='ssh -p 6788 localhost pbcopy'
+
+function remotesend() {
+    scp -P 6788 $1 localhost:~/Downloads
+}
+
+# FOS aliases
 alias fortigate='fgtdev conf get fortigate | awk -F ": " "{print \$2}"'
 alias fortigate_port='fgtdev conf get ssh_port | awk -F ": " "{print \$2}"'
 alias sshfgt='ssh -p $(fortigate_port) admin@$(fortigate)'
+
+# Development aliases
 alias createtags='git ls-files | grep -v -E "^linux-" | ctags -R -L -'
 alias gpush='git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)'
+
+# Print 256 color map for reference
+function printcolors() {
+    n=${1-16}
+    for i in {0..255}; do
+        printf "\e[48;05;%sm  %-3s  " $i $i
+        if [[ $((($i + 1) % $n)) == 0 ]]; then
+            printf "\n"
+        fi
+    done
+    echo -e "\e[m"
+}
 
 # Development tmux helper
 function devsession() {
