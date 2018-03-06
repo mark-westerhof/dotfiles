@@ -28,6 +28,7 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'cazador481/fakeclip.neovim'
 Plug 'w0rp/ale'
+Plug 'maximbaz/lightline-ale'
 Plug 'pangloss/vim-javascript'
 
 if &t_Co >= 256 || has('gui_running')
@@ -151,7 +152,8 @@ if &t_Co >= 256 || has('gui_running')
     \   'active': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
-    \       'right': [ ['ale', 'lineinfo'],
+    \       'right': [ ['linter_checking', 'linter_errors', 'linter_warnings',
+    \                      'linter_ok', 'lineinfo'],
     \                  ['percent'],
     \                  ['fileformat', 'fileencoding', 'filetype'] ]
     \   },
@@ -165,14 +167,21 @@ if &t_Co >= 256 || has('gui_running')
     \       'lineinfo': 'LightLineLineInfo',
     \   },
     \   'component_expand': {
-    \       'ale': 'ale#statusline#Status'
+    \       'linter_checking': 'lightline#ale#checking',
+    \       'linter_warnings': 'lightline#ale#warnings',
+    \       'linter_errors': 'lightline#ale#errors',
+    \       'linter_ok': 'lightline#ale#ok',
     \   },
     \   'component_type': {
-    \       'ale': 'error'
+    \       'linter_checking': 'ok',
+    \       'linter_warnings': 'warning',
+    \       'linter_errors': 'error',
+    \       'linter_ok': 'ok',
     \   },
-    \   'separator': { 'left': '', 'right': ''},
-    \   'subseparator': { 'left': '', 'right': ''}
+    \   'separator': { 'left': "\ue0b0", 'right': "\ue0b2"},
+    \   'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3"}
     \}
+
     let g:lightline.colorscheme = substitute(base16_theme, '-', '_', 'g')
 
     let s:lightline_wrap1 = 120
@@ -180,17 +189,17 @@ if &t_Co >= 256 || has('gui_running')
     let s:lightline_wrap3 = 60
 
     function! LightLineModified()
-        return &modified ? '+' : ''
+        return &modified ? "\uf196" : ''
     endfunction
 
     function! LightLineReadonly()
-        return &readonly ? '' : ''
+        return &readonly ? "\uf023" : ''
     endfunction
 
     function! LightLineFugitive()
         if exists('*fugitive#head') && winwidth(0) > s:lightline_wrap1
             let _ = fugitive#head()
-            return strlen(_) ? ' '._ : ''
+            return strlen(_) ? "\ue0a0 "._ : ''
         endif
         return ''
     endfunction
@@ -228,7 +237,7 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     function! LightLineLineInfo()
-        return ' ' . printf('%3d:%-2d', line('.'), col('.'))
+        return "\ue0a1 " . printf('%3d:%-2d', line('.'), col('.'))
     endfunction
 
     if has('nvim')
@@ -299,22 +308,17 @@ let g:ale_linters = {
 \   'python': ['flake8'],
 \   'html': []
 \}
-let g:ale_sign_error = "✗"
-let g:ale_sign_warning = '⚠'
-let g:ale_statusline_format = ['✗ (%d)', '⚠ (%d)', '']
+let g:ale_sign_error = "\uf05e"
+let g:ale_sign_warning = "\uf071"
 let g:ale_lint_delay = 1000
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-
 let g:ale_pattern_options = {
 \   '.*migadmin/lang/.*\.js$': {'ale_enabled': 0}
 \}
 
-augroup AfterLintUpdate
-    autocmd!
-    autocmd User ALELint call lightline#update()
-augroup END
+let g:lightline#ale#indicator_checking = "\uf110"
+let g:lightline#ale#indicator_warnings = "\uf071"
+let g:lightline#ale#indicator_errors = "\uf05e"
+let g:lightline#ale#indicator_ok = "\uf00c"
 
 "Easymotion
 let g:EasyMotion_leader_key = '<Leader>'

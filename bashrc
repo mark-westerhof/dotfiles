@@ -78,6 +78,11 @@ function devsession() {
     (cd $directory && tmux new -s $directory)
 }
 
+# FOS development config helper
+function confmodel() {
+    ./Configure -m $1 -dy -v $(git rev-parse --abbrev-ref HEAD)
+}
+
 # Source code indexing
 function indexsource() {
     echo "Creating ctags..."
