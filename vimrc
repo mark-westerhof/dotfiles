@@ -199,7 +199,7 @@ if &t_Co >= 256 || has('gui_running')
     function! LightLineFugitive()
         if exists('*fugitive#head') && winwidth(0) > s:lightline_wrap1
             let _ = fugitive#head()
-            return strlen(_) ? "\ue0a0 "._ : ''
+            return strlen(_) ? "\uf126 "._ : ''
         endif
         return ''
     endfunction
@@ -308,16 +308,18 @@ let g:ale_linters = {
 \   'python': ['flake8'],
 \   'html': []
 \}
-let g:ale_sign_error = "\uf05e"
-let g:ale_sign_warning = "\uf071"
 let g:ale_lint_delay = 1000
 let g:ale_pattern_options = {
 \   '.*migadmin/lang/.*\.js$': {'ale_enabled': 0}
 \}
 
+let g:ale_sign_error = "\uf06a"
+let g:ale_sign_warning = "\uf071"
+highlight link ALEErrorSign DiffDelete
+
 let g:lightline#ale#indicator_checking = "\uf110"
 let g:lightline#ale#indicator_warnings = "\uf071"
-let g:lightline#ale#indicator_errors = "\uf05e"
+let g:lightline#ale#indicator_errors = "\uf06a"
 let g:lightline#ale#indicator_ok = "\uf00c"
 
 "Easymotion
