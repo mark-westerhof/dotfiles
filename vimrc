@@ -304,7 +304,7 @@ let g:tagbar_sort = 0
 
 "Linting
 let g:ale_linters = {
-\   'javascript': ['jscs', 'jshint'],
+\   'javascript': ['eslint'],
 \   'python': ['flake8'],
 \   'html': []
 \}
