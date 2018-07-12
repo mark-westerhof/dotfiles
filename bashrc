@@ -28,9 +28,6 @@ export EDITOR=$editor
 export HISTSIZE=1000
 export HISTCONTROL=erasedups
 
-# FOS env
-export USESUDO=$(which sudo)
-
 # fzf
 [ -f "$HOME/.fzf.bash" ] && source $HOME/.fzf.bash
 export FZF_DEFAULT_COMMAND='ag -l -g ""'
@@ -51,9 +48,13 @@ function remotesend() {
     scp -P 6788 $1 localhost:~/Downloads
 }
 
+# FOS env
+export USESUDO=$(which sudo)
+[ -f "$HOME/fos_node_env" ] && source $HOME/fos_node_env
+
 # FOS aliases
-alias fortigate='fgtdev conf get fortigate | awk -F ": " "{print \$2}"'
-alias fortigate_port='fgtdev conf get ssh_port | awk -F ": " "{print \$2}"'
+alias fortigate='fos-dev conf get fortigate | awk -F ": " "{print \$2}"'
+alias fortigate_port='fos-dev conf get ssh_port | awk -F ": " "{print \$2}"'
 alias sshfgt='ssh -p $(fortigate_port) admin@$(fortigate)'
 
 # Development aliases

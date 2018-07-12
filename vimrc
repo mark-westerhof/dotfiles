@@ -317,10 +317,10 @@ let g:ale_sign_error = "\uf06a"
 let g:ale_sign_warning = "\uf071"
 highlight link ALEErrorSign DiffDelete
 
-let g:lightline#ale#indicator_checking = "\uf110"
-let g:lightline#ale#indicator_warnings = "\uf071"
-let g:lightline#ale#indicator_errors = "\uf06a"
-let g:lightline#ale#indicator_ok = "\uf00c"
+let g:lightline#ale#indicator_checking = "\uf110 "
+let g:lightline#ale#indicator_warnings = "\uf071 "
+let g:lightline#ale#indicator_errors = "\uf06a "
+let g:lightline#ale#indicator_ok = "\uf00c "
 
 "Easymotion
 let g:EasyMotion_leader_key = '<Leader>'
