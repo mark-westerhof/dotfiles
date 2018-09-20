@@ -30,7 +30,7 @@ export HISTCONTROL=erasedups
 
 # fzf
 [ -f "$HOME/.fzf.bash" ] && source $HOME/.fzf.bash
-export FZF_DEFAULT_COMMAND='ag -l -g ""'
+export FZF_DEFAULT_COMMAND='rg --files'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Node/NPM
@@ -53,9 +53,10 @@ export USESUDO=$(which sudo)
 [ -f "$HOME/fos_node_env" ] && source $HOME/fos_node_env
 
 # FOS aliases
-alias fortigate='fos-dev conf get fortigate | awk -F ": " "{print \$2}"'
-alias fortigate_port='fos-dev conf get ssh_port | awk -F ": " "{print \$2}"'
-alias sshfgt='ssh -p $(fortigate_port) admin@$(fortigate)'
+alias fgtdev_admin='fos-dev conf get fortigate_user | awk -F ": " "{print \$2}"'
+alias fgtdev_fgt='fos-dev conf get fortigate | awk -F ": " "{print \$2}"'
+alias fgtdev_port='fos-dev conf get ssh_port | awk -F ": " "{print \$2}"'
+alias sshfgt='ssh -p $(fgtdev_port) $(fgtdev_admin)@$(fgtdev_fgt)'
 
 # Development aliases
 alias createtags='git ls-files | grep -v -E "^linux-" | ctags -R -L -'
