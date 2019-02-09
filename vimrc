@@ -30,6 +30,7 @@ Plug 'cazador481/fakeclip.neovim'
 Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
 Plug 'pangloss/vim-javascript'
+Plug 'sakhnik/nvim-gdb', { 'do': './install.sh' }
 
 if &t_Co >= 256 || has('gui_running')
     Plug 'itchyny/lightline.vim'
@@ -351,7 +352,14 @@ set signcolumn=yes
 "Deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
+
+let g:deoplete#sources#ternjs#docs = 1
+let g:deoplete#sources#ternjs#types = 1
+let g:deoplete#sources#ternjs#case_insensitive = 1
+
 set completeopt-=preview
+autocmd CompleteDone * silent! pclose!
+
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<tab>"
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -359,7 +367,11 @@ function! s:my_cr_function() abort
     return deoplete#close_popup() . "\<CR>"
 endfunction
 
+" Uncomment to debug deoplete
+" call deoplete#custom#source('ternjs', 'is_debug_enabled', 1)
+" call deoplete#enable_logging('INFO', '/tmp/deoplete.log')
+
 "jsdoc
-let g:jsdoc_default_mapping = 0
+let g:jsdoc_enable_es6 = 1
 
 " }}}
