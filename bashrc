@@ -43,6 +43,7 @@ fi
 # SSH/clipboard
 alias ssh_clip_support="ssh -R 6788:localhost:22"
 alias remoteclip='ssh -p 6788 localhost pbcopy'
+alias sendbuffer='tmux show-buffer | remoteclip'
 
 function remotesend() {
     scp -P 6788 $1 localhost:~/Downloads
