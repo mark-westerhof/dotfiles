@@ -19,6 +19,7 @@ Plug 'ncm2/ncm2-bufword'
 Plug 'ncm2/ncm2-path'
 Plug 'ncm2/ncm2-tagprefix'
 Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
+Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 Plug 'airblade/vim-gitgutter'
@@ -33,6 +34,7 @@ Plug 'roxma/vim-tmux-clipboard'
 Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
 Plug 'pangloss/vim-javascript'
+Plug 'HerringtonDarkholme/yats.vim'
 Plug 'sakhnik/nvim-gdb', { 'do': './install.sh' }
 
 if &t_Co >= 256 || has('gui_running')
@@ -309,6 +311,7 @@ let g:tagbar_sort = 0
 "Linting
 let g:ale_linters = {
 \   'javascript': ['eslint'],
+\   'typescript': ['tsserver', 'tslint'],
 \   'html': []
 \}
 let g:ale_lint_delay = 1000
@@ -344,8 +347,14 @@ nnoremap <Space>/ :Ggrep<Space>
 nnoremap <Leader>gd :Gdiff HEAD<CR>
 vnoremap <C-g> "hy:tabedit %<CR>:Ggrep <C-r>h
 
-"Javscript
+"Javascript
 let g:javascript_plugin_jsdoc = 1
+
+"Typescript
+let g:nvim_typescript#diagnostics_enable = 0
+autocmd FileType typescript nnoremap <buffer> <C-]> :TSTypeDef<CR>
+autocmd FileType typescript nnoremap <buffer> <Leader>] :TSDefPreview<CR>
+autocmd FileType typescript nnoremap <buffer> <silent> K :TSDoc<CR>
 
 "Git Gutter
 let g:gitgutter_max_signs = 10000
