@@ -17,7 +17,6 @@ Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
 Plug 'ncm2/ncm2-bufword'
 Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-tagprefix'
 Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
 Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 Plug 'tpope/vim-fugitive'
