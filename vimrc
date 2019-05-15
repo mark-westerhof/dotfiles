@@ -13,9 +13,12 @@ Plug 'tomtom/tcomment_vim'
 Plug 'majutsushi/tagbar'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
-Plug 'Shougo/deoplete.nvim', {'do': function('DoRemote')}
-Plug 'carlitux/deoplete-ternjs'
-Plug 'zchee/deoplete-jedi'
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-tagprefix'
+Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 Plug 'airblade/vim-gitgutter'
@@ -26,7 +29,7 @@ Plug 'heavenshell/vim-jsdoc'
 Plug 'wavded/vim-stylus'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'cazador481/fakeclip.neovim'
+Plug 'roxma/vim-tmux-clipboard'
 Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
 Plug 'pangloss/vim-javascript'
@@ -306,7 +309,6 @@ let g:tagbar_sort = 0
 "Linting
 let g:ale_linters = {
 \   'javascript': ['eslint'],
-\   'python': ['flake8'],
 \   'html': []
 \}
 let g:ale_lint_delay = 1000
@@ -349,27 +351,16 @@ let g:javascript_plugin_jsdoc = 1
 let g:gitgutter_max_signs = 10000
 set signcolumn=yes
 
-"Deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
+"ncm2
+autocmd BufEnter * call ncm2#enable_for_buffer()
 
-let g:deoplete#sources#ternjs#docs = 1
-let g:deoplete#sources#ternjs#types = 1
-let g:deoplete#sources#ternjs#case_insensitive = 1
-
-set completeopt-=preview
+set completeopt=noinsert,menuone,noselect
+" set completeopt-=preview
 autocmd CompleteDone * silent! pclose!
 
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<tab>"
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function() abort
-    return deoplete#close_popup() . "\<CR>"
-endfunction
-
-" Uncomment to debug deoplete
-" call deoplete#custom#source('ternjs', 'is_debug_enabled', 1)
-" call deoplete#enable_logging('INFO', '/tmp/deoplete.log')
 
 "jsdoc
 let g:jsdoc_enable_es6 = 1
