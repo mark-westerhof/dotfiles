@@ -60,7 +60,9 @@ alias fgtdev_port='fos-dev conf get ssh_port | awk -F ": " "{print \$2}"'
 alias sshfgt='ssh -p $(fgtdev_port) $(fgtdev_admin)@$(fgtdev_fgt)'
 
 # Development aliases
-alias createtags='git ls-files | grep -v -E "^linux-" | ctags -R -L -'
+alias create-fos-tags='git ls-files | grep -E "*\.(c|cpp|h)$" |
+grep -v -E "^linux-|^tools|^cooked|^tests" |
+ctags -R -L -'
 alias gpush='git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)'
 
 # Print 256 color map for reference
@@ -82,15 +84,12 @@ function devsession() {
 }
 
 # FOS development config helper
-function confmodel() {
+function conf-fos-model() {
     ./Configure -m $1 -dy -v $(git rev-parse --abbrev-ref HEAD)
 }
 
 # Source code indexing
-function indexsource() {
-    echo "Creating ctags..."
-    createtags
-    echo "Creating cscope db..."
+function create-cscope-db() {
     rm -f cscope.*
     cscope -R -b -q -k
 }
