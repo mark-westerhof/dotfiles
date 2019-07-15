@@ -17,6 +17,7 @@ fi
 rm -rf base16-shell
 git clone $BASE_16_URI
 ln -sf $CHECKOUT_PATH/base16-shell/scripts ~/.base16_themes
+ln -sf $CHECKOUT_PATH/.alacritty.yml ~/.alacritty.yml
 
 mkdir -p ~/.config
 mkdir -p ~/.vim
