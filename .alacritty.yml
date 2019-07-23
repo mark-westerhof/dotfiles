@@ -6,3 +6,5 @@ font:
         family: Hack Nerd Font
         style: Bold
     size: 14
+mouse:
+    hide_when_typing: true
