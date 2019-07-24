@@ -192,6 +192,7 @@ if &t_Co >= 256 || has('gui_running')
     let s:lightline_wrap1 = 120
     let s:lightline_wrap2 = 80
     let s:lightline_wrap3 = 60
+    let s:lightline_fname_max = 80
 
     function! LightLineModified()
         return &modified ? "\uf196" : ''
@@ -215,7 +216,8 @@ if &t_Co >= 256 || has('gui_running')
             return ''
         endif
         return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
-            \ ('' != fname ? (winwidth(0) > s:lightline_wrap3 ? fname : expand('%:t')) : '[No Name]') .
+            \ ('' != fname ? (winwidth(0) > s:lightline_wrap3 &&
+            \ strlen(fname) < s:lightline_fname_max ? fname : expand('%:t')) : '[No Name]') .
             \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
     endfunction
 
