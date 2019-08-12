@@ -8,3 +8,6 @@ font:
     size: 14
 mouse:
     hide_when_typing: true
+
+key_bindings:
+    - { key: N, mods: Control, action: SpawnNewInstance }
