@@ -10,4 +10,4 @@ mouse:
     hide_when_typing: true
 
 key_bindings:
-    - { key: N, mods: Control, action: SpawnNewInstance }
+    - { key: N, mods: Control|Shift, action: SpawnNewInstance }
