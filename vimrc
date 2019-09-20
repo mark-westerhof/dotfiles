@@ -15,6 +15,7 @@ Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
 Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
+Plug 'ncm2/float-preview.nvim'
 Plug 'ncm2/ncm2-bufword'
 Plug 'ncm2/ncm2-path'
 Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
@@ -23,6 +24,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 Plug 'airblade/vim-gitgutter'
 Plug 'Lokaltog/vim-easymotion'
+Plug 'scrooloose/nerdtree'
+Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
 Plug 'heavenshell/vim-jsdoc'
@@ -38,6 +41,7 @@ Plug 'sakhnik/nvim-gdb', { 'do': './install.sh' }
 
 if &t_Co >= 256 || has('gui_running')
     Plug 'itchyny/lightline.vim'
+    Plug 'mengelbrecht/lightline-bufferline'
 endif
 
 call plug#end()
@@ -80,9 +84,6 @@ nnoremap <silent> <esc> :noh<cr><esc>
 "Show tabs and trailing whitespace
 set list lcs=trail:·,tab:»·
 
-"Remove trailing whitespace
-nnoremap <Leader>rtw :%s/\s\+$//e<CR>
-
 "Exit insert mode
 inoremap jk <Esc>
 
@@ -105,26 +106,16 @@ if has('nvim')
     tnoremap <C-[> <C-\><C-n>
 endif
 
-"Tab navigation
-nnoremap <silent> th :tabfirst<CR>
-nnoremap <silent> tj :tabnext<CR>
-nnoremap <silent> tk :tabprev<CR>
-nnoremap <silent> tl :tablast<CR>
-nnoremap <silent> tt :tabedit<Space>
-nnoremap <silent> tn :tabnew<Space>
-nnoremap <silent> tm :tabm<Space>
-nnoremap <silent> td :tabclose<CR>
-
 "Buffer navigation
-nnoremap fh :bf<CR>
-nnoremap fj :bn<CR>
-nnoremap fk :bp<CR>
-nnoremap fl :bl<CR>
-nnoremap fd :bp<bar>sp<bar>bn<bar>bd<CR>
+set hidden
+nnoremap <silent> fh :bf<CR>
+nnoremap <silent> fj :bn<CR>
+nnoremap <silent> fk :bp<CR>
+nnoremap <silent> fl :bl<CR>
+nnoremap <silent> fd :bp<bar>sp<bar>bn<bar>bd<CR>
 
 "Window shortcuts
 nnoremap <Leader>o :only<CR>
-nnoremap <Leader>r :redraw!<CR>
 
 "Copy pasting between vim instances and remote clipboard
 vnoremap <leader>y :w! /tmp/vim_clipboard<CR>
@@ -132,7 +123,7 @@ vnoremap <leader>r :w !ssh -p 6788 localhost pbcopy<CR>
 nnoremap <leader>p :r! cat /tmp/vim_clipboard<CR>
 
 "vimrc
-nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <Leader>ev :e $MYVIMRC<CR>
 nnoremap <Leader>sv :source $MYVIMRC<CR>
 
 "Find and replace selected
@@ -149,11 +140,16 @@ if &t_Co >= 256 || has('gui_running')
 
     set laststatus=2
     set noshowmode
+    set noshowcmd
     set ttimeoutlen=10
 
     let base16_theme = 'base16-' . $BASE_16_THEME
 
     let g:lightline = {
+    \   'tabline': {
+    \       'left': [ ['buffers'] ],
+    \       'right': [ ['close'] ]
+    \   },
     \   'active': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
@@ -172,12 +168,14 @@ if &t_Co >= 256 || has('gui_running')
     \       'lineinfo': 'LightLineLineInfo',
     \   },
     \   'component_expand': {
+    \       'buffers': 'lightline#bufferline#buffers',
     \       'linter_checking': 'lightline#ale#checking',
     \       'linter_warnings': 'lightline#ale#warnings',
     \       'linter_errors': 'lightline#ale#errors',
     \       'linter_ok': 'lightline#ale#ok',
     \   },
     \   'component_type': {
+    \       'buffers': 'tabsel',
     \       'linter_checking': 'ok',
     \       'linter_warnings': 'warning',
     \       'linter_errors': 'error',
@@ -211,8 +209,8 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     function! LightLineFilename()
-        let fname = expand('%')
-        if fname =~ 'term://'
+        let fname = expand('%:t')
+        if fname =~ 'NERD_tree' || fname =~ 'term://'
             return ''
         endif
         return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
@@ -222,7 +220,8 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     function! LightLineFileFormat()
-        if expand('%') =~ 'term://'
+        let fname = expand('%:t')
+        if fname =~ 'NERD_tree' || fname =~ 'term://'
             return ''
         endif
         return winwidth(0) > s:lightline_wrap2 ? &fileformat : ''
@@ -240,10 +239,16 @@ if &t_Co >= 256 || has('gui_running')
     endfunction
 
     function! LightLineMode()
+        if expand('%:t') =~ 'NERD_tree'
+            return 'Files'
+        endif
         return winwidth(0) > s:lightline_wrap2 ? lightline#mode() : ''
     endfunction
 
     function! LightLineLineInfo()
+        if expand('%:t') =~ 'NERD_tree'
+            return ''
+        endif
         return "\ue0a1 " . printf('%3d:%-2d', line('.'), col('.'))
     endfunction
 
@@ -260,6 +265,11 @@ if &t_Co >= 256 || has('gui_running')
     if &term =~ '256color'
         set t_ut=
     endif
+
+    "Bufferline
+    set showtabline=2
+    let g:lightline#bufferline#enable_devicons = 1
+    let g:lightline#bufferline#filename_modifier = ':t'
 
 else
     "-----Basic Terminal Settings------
@@ -342,11 +352,43 @@ nnoremap <Space>p :Files<CR>
 nnoremap <Space>d :Files %:p:h<CR>
 nnoremap <Space>s :Buffers<CR>
 nnoremap <Space>t :BTags<CR>
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+"Match theme
+let g:fzf_colors = {
+\   'fg':      ['fg', 'Normal'],
+\   'bg':      ['bg', 'Normal'],
+\   'hl':      ['fg', 'Comment'],
+\   'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+\   'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+\   'hl+':     ['fg', 'Statement'],
+\   'info':    ['fg', 'PreProc'],
+\   'border':  ['fg', 'Ignore'],
+\   'prompt':  ['fg', 'Conditional'],
+\   'pointer': ['fg', 'Exception'],
+\   'marker':  ['fg', 'Keyword'],
+\   'spinner': ['fg', 'Label'],
+\   'header':  ['fg', 'Comment']
+\}
+
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \                 <bang>0)
+
+"Nerdtree
+autocmd vimenter * NERDTree
+autocmd vimenter * call lightline#update()
+autocmd vimenter * wincmd p
+nnoremap <silent><leader>f :NERDTreeToggle<CR>:call lightline#update()<CR>
+nnoremap <silent><leader>r :NERDTreeFind<CR>:call lightline#update()<CR>
+let g:NERDTreeMinimalUI = 1
 
 "Fugitive
 nnoremap <Space>/ :Ggrep<Space>
 nnoremap <Leader>gd :Gdiff HEAD<CR>
-vnoremap <C-g> "hy:tabedit %<CR>:Ggrep <C-r>h
+vnoremap <C-g> "hy:Ggrep <C-r>h
 
 "Javascript
 let g:javascript_plugin_jsdoc = 1
@@ -365,7 +407,6 @@ set signcolumn=yes
 autocmd BufEnter * call ncm2#enable_for_buffer()
 
 set completeopt=noinsert,menuone,noselect
-" set completeopt-=preview
 autocmd CompleteDone * silent! pclose!
 
 inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
