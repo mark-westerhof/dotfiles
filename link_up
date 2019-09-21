@@ -3,6 +3,10 @@
 CHECKOUT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BASE_16_URI='https://github.com/chriskempson/base16-shell'
 
+rm -rf ~/.vim
+rm -f ~/.config/nvim
+rm -rf ~/.config/coc
+
 ln -sf $CHECKOUT_PATH/tmux.conf ~/.tmux.conf
 
 if [ "$(uname)" == "Darwin" ]; then
@@ -19,8 +23,13 @@ git clone $BASE_16_URI
 ln -sf $CHECKOUT_PATH/base16-shell/scripts ~/.base16_themes
 ln -sf $CHECKOUT_PATH/.alacritty.yml ~/.alacritty.yml
 
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
 mkdir -p ~/.config
 mkdir -p ~/.vim
 ln -sf $CHECKOUT_PATH/vimrc ~/.vimrc
 ln -sf ~/.vim ~/.config/nvim
 ln -sf $CHECKOUT_PATH/vimrc ~/.config/nvim/init.vim
+ln -sf $CHECKOUT_PATH/coc-settings.json ~/.config/nvim/coc-settings.json
+ln -sf $CHECKOUT_PATH/coc-settings.json ~/.vim/coc-settings.json

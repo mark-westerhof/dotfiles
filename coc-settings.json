@@ -1,0 +1,8 @@
+{
+    "diagnostic.errorSign": "\uf071",
+    "diagnostic.warningSign": "\uf071",
+    "diagnostic.infoSign": "\uf071",
+    "diagnostic.hintSign": "\uf05a",
+    "eslint.filetypes": ["javascript"],
+    "tsserver.enableJavascript": false
+}

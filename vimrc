@@ -10,16 +10,9 @@ endfunction
 Plug 'chriskempson/base16-vim'
 Plug 'mark-westerhof/vim-lightline-base16'
 Plug 'tomtom/tcomment_vim'
-Plug 'majutsushi/tagbar'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-Plug 'ncm2/float-preview.nvim'
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
-Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 Plug 'airblade/vim-gitgutter'
@@ -33,8 +26,6 @@ Plug 'wavded/vim-stylus'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'roxma/vim-tmux-clipboard'
-Plug 'w0rp/ale'
-Plug 'maximbaz/lightline-ale'
 Plug 'pangloss/vim-javascript'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'sakhnik/nvim-gdb', { 'do': './install.sh' }
@@ -153,8 +144,7 @@ if &t_Co >= 256 || has('gui_running')
     \   'active': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
-    \       'right': [ ['linter_checking', 'linter_errors', 'linter_warnings',
-    \                      'linter_ok', 'lineinfo'],
+    \       'right': [ ['diagnostic_warning', 'diagnostic_error', 'lineinfo'],
     \                  ['percent'],
     \                  ['fileformat', 'fileencoding', 'filetype'] ]
     \   },
@@ -169,17 +159,14 @@ if &t_Co >= 256 || has('gui_running')
     \   },
     \   'component_expand': {
     \       'buffers': 'lightline#bufferline#buffers',
-    \       'linter_checking': 'lightline#ale#checking',
-    \       'linter_warnings': 'lightline#ale#warnings',
-    \       'linter_errors': 'lightline#ale#errors',
-    \       'linter_ok': 'lightline#ale#ok',
+    \       'diagnostic_error': 'LightLineDiagnosticError',
+    \       'diagnostic_warning': 'LightLineDiagnosticWarning'
     \   },
     \   'component_type': {
     \       'buffers': 'tabsel',
-    \       'linter_checking': 'ok',
-    \       'linter_warnings': 'warning',
-    \       'linter_errors': 'error',
-    \       'linter_ok': 'ok',
+    \       'diagnostic_info': 'ok',
+    \       'diagnostic_error': 'error',
+    \       'diagnostic_warning': 'warning'
     \   },
     \   'separator': { 'left': "\ue0b0", 'right': "\ue0b2"},
     \   'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3"}
@@ -252,6 +239,24 @@ if &t_Co >= 256 || has('gui_running')
         return "\ue0a1 " . printf('%3d:%-2d', line('.'), col('.'))
     endfunction
 
+    function! LightLineDiagnosticError()
+        let info = get(b:, 'coc_diagnostic_info', {})
+        let errors = get(info, 'error', 0)
+        if errors
+            return errors . " \uf071"
+        fi
+        return ''
+    endfunction
+
+    function! LightLineDiagnosticWarning()
+        let info = get(b:, 'coc_diagnostic_info', {})
+        let warnings = get(info, 'warning', 0) + get(info, 'information', 0)
+        if warnings
+            return warnings . " \uf071"
+        fi
+        return ''
+    endfunction
+
     if has('nvim')
         set termguicolors
     endif
@@ -315,30 +320,6 @@ nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
 nnoremap <silent> <c-\> :TmuxNavigatePrevious<cr>
 
-"Taglist Bar
-nnoremap <F3> :TagbarToggle<CR>
-let g:tagbar_sort = 0
-
-"Linting
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\   'typescript': ['tsserver', 'tslint'],
-\   'html': []
-\}
-let g:ale_lint_delay = 1000
-let g:ale_pattern_options = {
-\   '.*migadmin/lang/.*\.js$': {'ale_enabled': 0}
-\}
-
-let g:ale_sign_error = "\uf06a"
-let g:ale_sign_warning = "\uf071"
-highlight link ALEErrorSign DiffDelete
-
-let g:lightline#ale#indicator_checking = "\uf110 "
-let g:lightline#ale#indicator_warnings = "\uf071 "
-let g:lightline#ale#indicator_errors = "\uf06a "
-let g:lightline#ale#indicator_ok = "\uf00c "
-
 "Easymotion
 let g:EasyMotion_leader_key = '<Leader>'
 let g:EasyMotion_smartcase = 1
@@ -378,9 +359,6 @@ command! -bang -nargs=* Ag
   \                 <bang>0)
 
 "Nerdtree
-autocmd vimenter * NERDTree
-autocmd vimenter * call lightline#update()
-autocmd vimenter * wincmd p
 nnoremap <silent><leader>f :NERDTreeToggle<CR>:call lightline#update()<CR>
 nnoremap <silent><leader>r :NERDTreeFind<CR>:call lightline#update()<CR>
 let g:NERDTreeMinimalUI = 1
@@ -393,25 +371,61 @@ vnoremap <C-g> "hy:Ggrep <C-r>h
 "Javascript
 let g:javascript_plugin_jsdoc = 1
 
-"Typescript
-let g:nvim_typescript#diagnostics_enable = 0
-autocmd FileType typescript nnoremap <buffer> <C-]> :TSTypeDef<CR>
-autocmd FileType typescript nnoremap <buffer> <Leader>] :TSDefPreview<CR>
-autocmd FileType typescript nnoremap <buffer> <silent> K :TSDoc<CR>
-
 "Git Gutter
 let g:gitgutter_max_signs = 10000
 set signcolumn=yes
 
-"ncm2
-autocmd BufEnter * call ncm2#enable_for_buffer()
+"coc
+function! InstallCocPlugins()
+    CocInstall coc-tsserver coc-json coc-css coc-eslint coc-angular
+endfunction
 
-set completeopt=noinsert,menuone,noselect
-autocmd CompleteDone * silent! pclose!
+set updatetime=300
+set shortmess+=c
 
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<tab>"
+highlight link CocErrorSign DiffDelete
+highlight link CocWarningSign Todo
+highlight link CocInfoSign Todo
+
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+nnoremap <silent> <space>a :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <space>e :<C-u>CocList extensions<cr>
+nnoremap <silent> <space>c :<C-u>CocList commands<cr>
+
+au User CocDiagnosticChange call lightline#update()
+
+" Use tab for trigger completion with characters ahead and navigate.
+inoremap <silent><expr> <TAB>
+\   pumvisible() ? "\<C-n>" :
+\   <SID>check_back_space() ? "\<TAB>" :
+\   coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    else
+        call CocAction('doHover')
+    endif
+endfunction
 
 "jsdoc
 let g:jsdoc_enable_es6 = 1
