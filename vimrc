@@ -265,12 +265,6 @@ if &t_Co >= 256 || has('gui_running')
 
     let &colorcolumn="80,100,120"
 
-    "Disable Background Color Erase (BCE) so that color schemes
-    "work properly when Vim is used inside tmux and GNU screen.
-    if &term =~ '256color'
-        set t_ut=
-    endif
-
     "Bufferline
     set showtabline=2
     let g:lightline#bufferline#enable_devicons = 1
