@@ -4,7 +4,7 @@ font:
         style: Regular
     bold:
         family: Hack Nerd Font
-        style: Bold
+        style: Regular
     size: 14
 mouse:
     hide_when_typing: true

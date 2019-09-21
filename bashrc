@@ -4,7 +4,7 @@
 
 # Theme
 if [ -z $BASE_16_THEME ]; then
-    export BASE_16_THEME='ocean'
+    export BASE_16_THEME='gruvbox-dark-soft'
     shell_theme=$HOME/.base16_themes/base16-$BASE_16_THEME.sh
     if [ -f $shell_theme ]; then
         . $shell_theme
@@ -41,7 +41,7 @@ if [ -f "$HOME/.nvm/nvm.sh" ]; then
 fi
 
 # SSH/clipboard
-alias ssh_clip_support="ssh -R 6788:localhost:22"
+alias ssh_clip_support="ssh -o SendEnv=BASE_16_THEME -R 6788:localhost:22"
 alias remoteclip='ssh -p 6788 localhost pbcopy'
 alias sendbuffer='tmux show-buffer | remoteclip'
 
