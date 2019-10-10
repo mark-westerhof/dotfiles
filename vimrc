@@ -51,6 +51,7 @@ syntax on
 set spell
 set nowrap
 set backspace=indent,eol,start
+set mouse=n
 if has('nvim')
     set inccommand=nosplit
 endif
@@ -262,6 +263,9 @@ if &t_Co >= 256 || has('gui_running')
     endif
 
     execute 'colorscheme' base16_theme
+
+    " https://github.com/neovim/neovim/issues/4210#issuecomment-282186171
+    hi Normal ctermbg=NONE guibg=NONE
 
     let &colorcolumn="80,100,120"
 
