@@ -21,7 +21,7 @@ fi
 rm -rf base16-shell
 git clone $BASE_16_URI
 ln -sf $CHECKOUT_PATH/base16-shell/scripts ~/.base16_themes
-ln -sf $CHECKOUT_PATH/.alacritty.yml ~/.alacritty.yml
+ln -sf $CHECKOUT_PATH/alacritty.yml ~/.alacritty.yml
 
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
