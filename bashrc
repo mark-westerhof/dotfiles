@@ -4,7 +4,7 @@
 
 # Theme
 if [ -z $BASE_16_THEME ]; then
-    export BASE_16_THEME='gruvbox-dark-soft'
+    export BASE_16_THEME='ocean'
     shell_theme=$HOME/.base16_themes/base16-$BASE_16_THEME.sh
     if [ -f $shell_theme ]; then
         . $shell_theme

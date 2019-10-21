@@ -58,7 +58,6 @@ endif
 
 "Turn off some features
 set nohlsearch
-set mouse=
 
 "stfu
 set visualbell
@@ -136,6 +135,7 @@ if &t_Co >= 256 || has('gui_running')
     set ttimeoutlen=10
 
     let base16_theme = 'base16-' . $BASE_16_THEME
+    let base16colorspace=256
 
     let g:lightline = {
     \   'tabline': {
@@ -143,6 +143,13 @@ if &t_Co >= 256 || has('gui_running')
     \       'right': [ ['close'] ]
     \   },
     \   'active': {
+    \       'left': [ [ 'mode', 'paste' ],
+    \                 [ 'fugitive', 'filename' ] ],
+    \       'right': [ ['diagnostic_warning', 'diagnostic_error', 'lineinfo'],
+    \                  ['percent'],
+    \                  ['fileformat', 'fileencoding', 'filetype'] ]
+    \   },
+    \   'inactive': {
     \       'left': [ [ 'mode', 'paste' ],
     \                 [ 'fugitive', 'filename' ] ],
     \       'right': [ ['diagnostic_warning', 'diagnostic_error', 'lineinfo'],
@@ -169,8 +176,8 @@ if &t_Co >= 256 || has('gui_running')
     \       'diagnostic_error': 'error',
     \       'diagnostic_warning': 'warning'
     \   },
-    \   'separator': { 'left': "\ue0b0", 'right': "\ue0b2"},
-    \   'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3"}
+    \   'separator': { 'left': "\ue0b4", 'right': "\ue0b6"},
+    \   'subseparator': { 'left': "\ue0b5", 'right': "\ue0b7"}
     \}
 
     let g:lightline.colorscheme = substitute(base16_theme, '-', '_', 'g')
@@ -327,13 +334,18 @@ map n <Plug>(easymotion-next)
 map N <Plug>(easymotion-prev)
 
 "fzf
-nnoremap <Space>p :Files<CR>
-nnoremap <Space>d :Files %:p:h<CR>
-nnoremap <Space>s :Buffers<CR>
-nnoremap <Space>t :BTags<CR>
+" nnoremap <Space>p :Files<CR>
+nnoremap <silent> <Space>p :call fzf#vim#files('.', {'options': '--prompt ""'})<CR>
+nnoremap <silent> <Space>d :Files %:p:h<CR>
+nnoremap <silent> <Space>s :Buffers<CR>
+nnoremap <silent> <Space>t :BTags<CR>
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
-"Match theme
+" let $FZF_DEFAULT_OPTS=' --color=dark --color=fg:15,bg:-1,hl:1,fg+:#ffffff,bg+:0,hl+:1
+" \  --color=info:0,prompt:0,pointer:12,marker:4,spinner:11,header:-1 --layout=reverse  --margin=1,4'
+let $FZF_DEFAULT_OPTS=' --layout=reverse --prompt="" --margin=1,4'
+
+" Match theme
 let g:fzf_colors = {
 \   'fg':      ['fg', 'Normal'],
 \   'bg':      ['bg', 'Normal'],
@@ -341,14 +353,36 @@ let g:fzf_colors = {
 \   'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
 \   'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
 \   'hl+':     ['fg', 'Statement'],
-\   'info':    ['fg', 'PreProc'],
-\   'border':  ['fg', 'Ignore'],
+\   'info':    ['fg', 'IncSearch'],
 \   'prompt':  ['fg', 'Conditional'],
 \   'pointer': ['fg', 'Exception'],
 \   'marker':  ['fg', 'Keyword'],
 \   'spinner': ['fg', 'Label'],
 \   'header':  ['fg', 'Comment']
 \}
+
+let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+
+function! FloatingFZF()
+    let buf = nvim_create_buf(v:false, v:true)
+    call setbufvar(buf, '&signcolumn', 'no')
+
+    let height = 25
+    let width = 80
+    let horizontal = float2nr((&columns - width) / 2)
+    let vertical = 3
+
+    let opts = {
+                \ 'relative': 'editor',
+                \ 'row': vertical,
+                \ 'col': horizontal,
+                \ 'width': width,
+                \ 'height': height,
+                \ 'style': 'minimal'
+                \ }
+
+    call nvim_open_win(buf, v:true, opts)
+endfunction
 
 command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>,
