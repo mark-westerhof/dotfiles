@@ -8,7 +8,6 @@ function! DoRemote(arg)
 endfunction
 
 Plug 'chriskempson/base16-vim'
-Plug 'mark-westerhof/vim-lightline-base16'
 Plug 'tomtom/tcomment_vim'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
@@ -17,8 +16,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 Plug 'airblade/vim-gitgutter'
 Plug 'Lokaltog/vim-easymotion'
-Plug 'scrooloose/nerdtree'
-Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
 Plug 'heavenshell/vim-jsdoc'
@@ -29,11 +26,7 @@ Plug 'roxma/vim-tmux-clipboard'
 Plug 'pangloss/vim-javascript'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'sakhnik/nvim-gdb', { 'do': './install.sh' }
-
-if &t_Co >= 256 || has('gui_running')
-    Plug 'itchyny/lightline.vim'
-    Plug 'mengelbrecht/lightline-bufferline'
-endif
+Plug 'ap/vim-buftabline'
 
 call plug#end()
 "}}}
@@ -125,159 +118,21 @@ vnoremap <C-s> "hy:.,$s/<C-r>h//gc<left><left><left>
 
 "Appearance {{{
 
-"Lightline
+"Status line
 if &t_Co >= 256 || has('gui_running')
     set background=dark
 
-    set laststatus=2
-    set noshowmode
-    set noshowcmd
     set ttimeoutlen=10
+    set noshowcmd
 
     let base16_theme = 'base16-' . $BASE_16_THEME
-    let base16colorspace=256
-
-    let g:lightline = {
-    \   'tabline': {
-    \       'left': [ ['buffers'] ],
-    \       'right': [ ['close'] ]
-    \   },
-    \   'active': {
-    \       'left': [ [ 'mode', 'paste' ],
-    \                 [ 'fugitive', 'filename' ] ],
-    \       'right': [ ['diagnostic_warning', 'diagnostic_error', 'lineinfo'],
-    \                  ['percent'],
-    \                  ['fileformat', 'fileencoding', 'filetype'] ]
-    \   },
-    \   'inactive': {
-    \       'left': [ [ 'mode', 'paste' ],
-    \                 [ 'fugitive', 'filename' ] ],
-    \       'right': [ ['diagnostic_warning', 'diagnostic_error', 'lineinfo'],
-    \                  ['percent'],
-    \                  ['fileformat', 'fileencoding', 'filetype'] ]
-    \   },
-    \   'component_function': {
-    \       'fugitive': 'LightLineFugitive',
-    \       'filename': 'LightLineFilename',
-    \       'fileformat': 'LightLineFileFormat',
-    \       'filetype': 'LightLineFileType',
-    \       'fileencoding': 'LightLineFileEncoding',
-    \       'mode': 'LightLineMode',
-    \       'lineinfo': 'LightLineLineInfo',
-    \   },
-    \   'component_expand': {
-    \       'buffers': 'lightline#bufferline#buffers',
-    \       'diagnostic_error': 'LightLineDiagnosticError',
-    \       'diagnostic_warning': 'LightLineDiagnosticWarning'
-    \   },
-    \   'component_type': {
-    \       'buffers': 'tabsel',
-    \       'diagnostic_info': 'ok',
-    \       'diagnostic_error': 'error',
-    \       'diagnostic_warning': 'warning'
-    \   },
-    \   'separator': { 'left': "\ue0b4", 'right': "\ue0b6"},
-    \   'subseparator': { 'left': "\ue0b5", 'right': "\ue0b7"}
-    \}
-
-    let g:lightline.colorscheme = substitute(base16_theme, '-', '_', 'g')
-
-    let s:lightline_wrap1 = 120
-    let s:lightline_wrap2 = 80
-    let s:lightline_wrap3 = 60
-    let s:lightline_fname_max = 80
-
-    function! LightLineModified()
-        return &modified ? "\uf196" : ''
-    endfunction
-
-    function! LightLineReadonly()
-        return &readonly ? "\uf023" : ''
-    endfunction
-
-    function! LightLineFugitive()
-        if exists('*fugitive#head') && winwidth(0) > s:lightline_wrap1
-            let _ = fugitive#head()
-            return strlen(_) ? "\uf126 "._ : ''
-        endif
-        return ''
-    endfunction
-
-    function! LightLineFilename()
-        let fname = expand('%:t')
-        if fname =~ 'NERD_tree' || fname =~ 'term://'
-            return ''
-        endif
-        return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
-            \ ('' != fname ? (winwidth(0) > s:lightline_wrap3 &&
-            \ strlen(fname) < s:lightline_fname_max ? fname : expand('%:t')) : '[No Name]') .
-            \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
-    endfunction
-
-    function! LightLineFileFormat()
-        let fname = expand('%:t')
-        if fname =~ 'NERD_tree' || fname =~ 'term://'
-            return ''
-        endif
-        return winwidth(0) > s:lightline_wrap2 ? &fileformat : ''
-    endfunction
-
-    function! LightLineFileType()
-        return winwidth(0) > s:lightline_wrap2 ? (strlen(&filetype) ? &filetype : '') : ''
-    endfunction
-
-    function! LightLineFileEncoding()
-        if expand('%') =~ 'term://'
-            return ''
-        endif
-        return winwidth(0) > s:lightline_wrap2 ? (strlen(&fenc) ? &fenc : &enc) : ''
-    endfunction
-
-    function! LightLineMode()
-        if expand('%:t') =~ 'NERD_tree'
-            return 'Files'
-        endif
-        return winwidth(0) > s:lightline_wrap2 ? lightline#mode() : ''
-    endfunction
-
-    function! LightLineLineInfo()
-        if expand('%:t') =~ 'NERD_tree'
-            return ''
-        endif
-        return "\ue0a1 " . printf('%3d:%-2d', line('.'), col('.'))
-    endfunction
-
-    function! LightLineDiagnosticError()
-        let info = get(b:, 'coc_diagnostic_info', {})
-        let errors = get(info, 'error', 0)
-        if errors
-            return errors . " \uf071"
-        fi
-        return ''
-    endfunction
-
-    function! LightLineDiagnosticWarning()
-        let info = get(b:, 'coc_diagnostic_info', {})
-        let warnings = get(info, 'warning', 0) + get(info, 'information', 0)
-        if warnings
-            return warnings . " \uf071"
-        fi
-        return ''
-    endfunction
 
     if has('nvim')
         set termguicolors
     endif
 
     execute 'colorscheme' base16_theme
-
-    let &colorcolumn="80,100,120"
-
-    "Bufferline
-    set showtabline=2
-    let g:lightline#bufferline#enable_devicons = 1
-    let g:lightline#bufferline#filename_modifier = ':t'
-
+    exec 'source ' $HOME . '/.vim-statusline/' . substitute(base16_theme, '-', '_', 'g') . '.vim'
 else
     "-----Basic Terminal Settings------
     colorscheme desert
@@ -330,32 +185,31 @@ omap / <Plug>(easymotion-tn)
 map n <Plug>(easymotion-next)
 map N <Plug>(easymotion-prev)
 
+"Buftabline
+let g:buftabline_show = 1
+
 "fzf
-" nnoremap <Space>p :Files<CR>
-nnoremap <silent> <Space>p :call fzf#vim#files('.', {'options': '--prompt ""'})<CR>
-nnoremap <silent> <Space>d :Files %:p:h<CR>
-nnoremap <silent> <Space>s :Buffers<CR>
-nnoremap <silent> <Space>t :BTags<CR>
+nnoremap <silent> <Space>p :call fzf#vim#files('.', {'options': '--prompt "Files: "'})<CR>
+noremap <silent> <Space>d :call fzf#vim#files(expand('%:p:h'), {'options': '--prompt "Directory Files: "'})<CR>
+nnoremap <silent> <Space>s :call fzf#vim#buffers({'options': '--prompt "Buffers: "'})<CR>
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
-" let $FZF_DEFAULT_OPTS=' --color=dark --color=fg:15,bg:-1,hl:1,fg+:#ffffff,bg+:0,hl+:1
-" \  --color=info:0,prompt:0,pointer:12,marker:4,spinner:11,header:-1 --layout=reverse  --margin=1,4'
 let $FZF_DEFAULT_OPTS=' --layout=reverse --prompt="" --margin=1,4'
 
 " Match theme
 let g:fzf_colors = {
-\   'fg':      ['fg', 'Normal'],
-\   'bg':      ['bg', 'Normal'],
-\   'hl':      ['fg', 'Comment'],
-\   'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-\   'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-\   'hl+':     ['fg', 'Statement'],
-\   'info':    ['fg', 'IncSearch'],
-\   'prompt':  ['fg', 'Conditional'],
-\   'pointer': ['fg', 'Exception'],
-\   'marker':  ['fg', 'Keyword'],
-\   'spinner': ['fg', 'Label'],
-\   'header':  ['fg', 'Comment']
+\    'fg':      ['fg', 'Normal'],
+\    'hl':      ['fg', 'Comment'],
+\    'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+\    'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+\    'hl+':     ['fg', 'Conditional'],
+\    'info':    ['fg', 'IncSearch'],
+\    'border':  ['fg', 'Ignore'],
+\    'prompt':  ['fg', 'Conditional'],
+\    'pointer': ['fg', 'Conditional'],
+\    'marker':  ['fg', 'Conditional'],
+\    'spinner': ['fg', 'Label'],
+\    'header':  ['fg', 'Comment']
 \}
 
 let g:fzf_layout = { 'window': 'call FloatingFZF()' }
@@ -381,17 +235,6 @@ function! FloatingFZF()
     call nvim_open_win(buf, v:true, opts)
 endfunction
 
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
-
-"Nerdtree
-nnoremap <silent><leader>f :NERDTreeToggle<CR>:call lightline#update()<CR>
-nnoremap <silent><leader>r :NERDTreeFind<CR>:call lightline#update()<CR>
-let g:NERDTreeMinimalUI = 1
-
 "Fugitive
 nnoremap <Space>/ :Ggrep<Space>
 nnoremap <Leader>gd :Gdiff HEAD<CR>
@@ -412,10 +255,6 @@ endfunction
 set updatetime=300
 set shortmess+=c
 
-highlight link CocErrorSign DiffDelete
-highlight link CocWarningSign Todo
-highlight link CocInfoSign Todo
-
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
@@ -427,8 +266,6 @@ nmap <silent> gr <Plug>(coc-references)
 nnoremap <silent> <space>a :<C-u>CocList diagnostics<cr>
 nnoremap <silent> <space>e :<C-u>CocList extensions<cr>
 nnoremap <silent> <space>c :<C-u>CocList commands<cr>
-
-au User CocDiagnosticChange call lightline#update()
 
 " Use tab for trigger completion with characters ahead and navigate.
 inoremap <silent><expr> <TAB>
