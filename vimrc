@@ -44,13 +44,13 @@ syntax on
 set spell
 set nowrap
 set backspace=indent,eol,start
-set mouse=n
 if has('nvim')
     set inccommand=nosplit
 endif
 
 "Turn off some features
 set nohlsearch
+set mouse=
 
 "stfu
 set visualbell

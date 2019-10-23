@@ -105,24 +105,27 @@ endfunction
 
 function! SetWarnings()
     let info = get(b:, 'coc_diagnostic_info', {})
-    let errors = get(info, 'error', 0)
-    let warnings = get(info, 'warning', 0) + get(info, 'information', 0)
+    let errorCount = get(info, 'error', 0)
+    let warningCount = get(info, 'warning', 0)
+    let infoCount = get(info, 'information', 0)
 
     let result = ''
 
-    if errors || warnings
-        if errors
-            call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex08, "none", s:cterm08, "none")
-            call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex0A, s:hex08, s:cterm0A, s:cterm08)
-            let result = '  ' . errors . ' '
-        else
-            call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex0A, "none", s:cterm0A, "none")
-            call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex08, s:hex0A, s:cterm08, s:cterm0A)
-            let result = '  ' . warnings . ' '
-        endif
-    else
+    if errorCount
+        call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex08, "none", s:cterm08, "none")
+        call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex0A, s:hex08, s:cterm0A, s:cterm08)
+        let result = '  ' . errorCount . ' '
+    elseif warningCount
+        call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex0A, "none", s:cterm0A, "none")
+        call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex08, s:hex0A, s:cterm08, s:cterm0A)
+        let result = '  ' . warningCount . ' '
+    elseif infoCount
         call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex0D, "none", s:cterm0D, "none")
         call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex00, s:hex0D, s:cterm00, s:cterm0D)
+        let result = '  ' . infoCount . ' '
+    else
+        call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex0B, "none", s:cterm0B, "none")
+        call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex00, s:hex0B, s:cterm00, s:cterm0B)
         let result = '  '
     endif
 
@@ -179,7 +182,7 @@ hi GitGutterChangeDelete guibg=none ctermbg=none
 
 highlight link CocErrorSign WarningMsg
 highlight link CocWarningSign Label
-highlight link CocInfoSign Label
+highlight link CocInfoSign Directory
 
 " Buffer tabline
 hi TabLine guibg=none ctermbg=none
