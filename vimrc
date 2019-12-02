@@ -186,7 +186,8 @@ map n <Plug>(easymotion-next)
 map N <Plug>(easymotion-prev)
 
 "Buftabline
-let g:buftabline_show = 1
+let g:buftabline_indicators = 1
+
 
 "fzf
 nnoremap <silent> <Space>p :call fzf#vim#files('.', {'options': '--prompt "Files: "'})<CR>
@@ -219,7 +220,7 @@ function! FloatingFZF()
     call setbufvar(buf, '&signcolumn', 'no')
 
     let height = 25
-    let width = 80
+    let width = 140
     let horizontal = float2nr((&columns - width) / 2)
     let vertical = 3
 
@@ -249,7 +250,7 @@ set signcolumn=yes
 
 "coc
 function! InstallCocPlugins()
-    CocInstall coc-tsserver coc-json coc-css coc-eslint coc-angular
+    CocInstall coc-tsserver cos-tslint coc-json coc-css coc-eslint coc-angular
 endfunction
 
 set updatetime=300
@@ -262,6 +263,8 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
+nmap <silent> <leader>rn <Plug>(coc-rename)
 
 nnoremap <silent> <space>a :<C-u>CocList diagnostics<cr>
 nnoremap <silent> <space>e :<C-u>CocList extensions<cr>
