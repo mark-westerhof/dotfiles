@@ -11,11 +11,6 @@ if [ -z $BASE_16_THEME ]; then
     fi
 fi
 
-# "Ctrl h" fix https://github.com/neovim/neovim/issues/2048
-if [[ -f "$HOME/$TERM.ti" ]]; then
-    tic $HOME/$TERM.ti
-fi
-
 # Editor
 editor='vim'
 if command -v nvim >/dev/null 2>&1; then
