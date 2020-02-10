@@ -32,7 +32,10 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 if [ -f "$HOME/.nvm/nvm.sh" ]; then
     export NVM_DIR="$HOME/.nvm"
     source $NVM_DIR/nvm.sh
-    export NODE_PATH=$(npm root -g)
+
+    if [ -f ".nvmrc" ]; then
+        nvm use --silent
+    fi
 fi
 
 # SSH/clipboard
