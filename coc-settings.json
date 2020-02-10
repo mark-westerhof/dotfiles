@@ -4,5 +4,10 @@
     "diagnostic.infoSign": "\uf05a",
     "diagnostic.hintSign": "\uf05a",
     "eslint.filetypes": ["javascript"],
+    "git.addedSign.hlGroup": "GitGutterAdd",
+    "git.changedSign.hlGroup": "GitGutterChange",
+    "git.removedSign.hlGroup": "GitGutterDelete",
+    "git.topRemovedSign.hlGroup": "GitGutterDelete",
+    "git.changeRemovedSign.hlGroup": "GitGutterChangeDelete",
     "tsserver.enableJavascript": false
 }

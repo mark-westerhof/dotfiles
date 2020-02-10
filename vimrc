@@ -14,7 +14,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
-Plug 'airblade/vim-gitgutter'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
@@ -244,15 +243,12 @@ vnoremap <C-g> "hy:Ggrep <C-r>h
 "Javascript
 let g:javascript_plugin_jsdoc = 1
 
-"Git Gutter
-let g:gitgutter_max_signs = 10000
-set signcolumn=yes
-
 "coc
 function! InstallCocPlugins()
-    CocInstall coc-tsserver cos-tslint coc-json coc-css coc-eslint coc-angular
+    CocInstall coc-tsserver coc-tslint coc-json coc-git coc-css coc-eslint coc-angular
 endfunction
 
+set signcolumn=yes
 set updatetime=300
 set shortmess+=c
 

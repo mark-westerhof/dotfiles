@@ -174,11 +174,13 @@ call g:Base16StatusLineHighlight("Base16StatusLineFileType", s:hex02, "none", s:
 
 " Theme modifications to complement statusline
 hi LineNr guibg=none ctermbg=none
+hi SignColumn guibg=none ctermbg=none
+hi EndOfBuffer guifg=bg ctermfg=bg
 
-hi GitGutterAdd guibg=none ctermbg=none
-hi GitGutterChange guibg=none ctermbg=none
-hi GitGutterDelete guibg=none ctermbg=none
-hi GitGutterChangeDelete guibg=none ctermbg=none
+call g:Base16StatusLineHighlight("GitGutterAdd", s:hex0B, "none", s:cterm0B, "none")
+call g:Base16StatusLineHighlight("GitGutterChange", s:hex0D, "none", s:cterm0D, "none")
+call g:Base16StatusLineHighlight("GitGutterDelete", s:hex08, "none", s:cterm08, "none")
+call g:Base16StatusLineHighlight("GitGutterChangeDelete", s:hex0E, "none", s:cterm0E, "none")
 
 highlight link CocErrorSign WarningMsg
 highlight link CocWarningSign Label
