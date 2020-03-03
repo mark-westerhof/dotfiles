@@ -14,7 +14,8 @@ ln -sf $CHECKOUT_PATH/tmux.conf ~/.tmux.conf
 if [ "$(uname)" == "Darwin" ]; then
     cp $CHECKOUT_PATH/bashrc_osx ~/.bashrc
     echo -e "\n. $CHECKOUT_PATH/bashrc" >> ~/.bashrc
-    echo '[ -f "$HOME/.bashrc" ] && . $HOME/.bashrc' > ~/.bash_profile
+    echo 'export BASH_SILENCE_DEPRECATION_WARNING=1' > ~/.bash_profile
+    echo '[ -f "$HOME/.bashrc" ] && . $HOME/.bashrc' >> ~/.bash_profile
     ln -sf $CHECKOUT_PATH/tmux_osx.conf ~/.tmux_osx.conf
 else
     ln -sf $CHECKOUT_PATH/bashrc ~/.bashrc
