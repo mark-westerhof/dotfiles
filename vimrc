@@ -9,22 +9,21 @@ endfunction
 
 Plug 'chriskempson/base16-vim'
 Plug 'tomtom/tcomment_vim'
-Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'tpope/vim-surround'
-Plug 'mattn/emmet-vim'
-Plug 'heavenshell/vim-jsdoc'
+Plug 'heavenshell/vim-jsdoc', {'tag': '1.0.0'}
 Plug 'wavded/vim-stylus'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'roxma/vim-tmux-clipboard'
 Plug 'pangloss/vim-javascript'
 Plug 'HerringtonDarkholme/yats.vim'
-Plug 'sakhnik/nvim-gdb', { 'do': './install.sh' }
+Plug 'sakhnik/nvim-gdb', {'do': './install.sh'}
 Plug 'ap/vim-buftabline'
 
 call plug#end()

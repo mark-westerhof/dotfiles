@@ -32,14 +32,17 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 if [ -f "$HOME/.nvm/nvm.sh" ]; then
     export NVM_DIR="$HOME/.nvm"
     source $NVM_DIR/nvm.sh
-
+    if [ -f "$NVM_DIR/bash_completion" ]; then
+        source $NVM_DIR/bash_completion
+    fi
     if [ -f ".nvmrc" ]; then
         nvm use --silent
     fi
 fi
+alias install-npm-dev-deps='npm install -g neovim yarn gulp @angular/cli'
 
 # SSH/clipboard
-alias ssh_clip_support="ssh -o SendEnv=BASE_16_THEME -R 6788:172.16.250.1:22"
+alias ssh-clip-support="ssh -o SendEnv=BASE_16_THEME -R 6788:172.16.250.1:22"
 alias remoteclip='ssh -p 6788 localhost pbcopy'
 alias sendbuffer='tmux show-buffer | remoteclip'
 
@@ -52,16 +55,16 @@ export USESUDO=$(which sudo)
 [ -f "$HOME/fos_node_env" ] && source $HOME/fos_node_env
 
 # FOS aliases
-alias fgtdev_admin='fos-dev conf get fortigate_user | awk -F ": " "{print \$2}"'
-alias fgtdev_fgt='fos-dev conf get fortigate | awk -F ": " "{print \$2}"'
-alias fgtdev_port='fos-dev conf get ssh_port | awk -F ": " "{print \$2}"'
-alias sshfgt='ssh -p $(fgtdev_port) $(fgtdev_admin)@$(fgtdev_fgt)'
+alias fgtdev-admin='fos-dev conf get fortigate_user | awk -F ": " "{print \$2}"'
+alias fgtdev-fgt='fos-dev conf get fortigate | awk -F ": " "{print \$2}"'
+alias fgtdev-port='fos-dev conf get ssh_port | awk -F ": " "{print \$2}"'
+alias sshfgt='ssh -p $(fgtdev-port) $(fgtdev-admin)@$(fgtdev-fgt)'
 
 # Development aliases
 alias create-fos-tags='git ls-files | grep -E "*\.(c|cpp|h)$" |
 grep -v -E "^linux-|^tools|^cooked|^tests" |
 ctags -R -L -'
-alias gpush='git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)'
+alias gerrit-review-push='git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)'
 
 # Print 256 color map for reference
 function printcolors() {
