@@ -8,5 +8,8 @@ font:
     size: 14
 mouse:
     hide_when_typing: true
+scrolling:
+    history: 0
+    multiplier: 0
 key_bindings:
     - { key: N, mods: Control|Shift, action: SpawnNewInstance }
