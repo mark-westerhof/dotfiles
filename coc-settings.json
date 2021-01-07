@@ -3,7 +3,9 @@
     "diagnostic.warningSign": "\uf071",
     "diagnostic.infoSign": "\uf05a",
     "diagnostic.hintSign": "\uf05a",
-    "eslint.workingDirectories": ["auto"],
+    "eslint.workingDirectories": [
+        { "mode" : "auto" }
+    ],
     "git.addedSign.hlGroup": "GitGutterAdd",
     "git.changedSign.hlGroup": "GitGutterChange",
     "git.removedSign.hlGroup": "GitGutterDelete",
