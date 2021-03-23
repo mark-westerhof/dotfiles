@@ -291,6 +291,9 @@ function! s:show_documentation()
     endif
 endfunction
 
+" Fix linting
+nnoremap <leader>fl :CocCommand eslint.executeAutofix<CR>
+
 "jsdoc
 let g:jsdoc_enable_es6 = 1
 
