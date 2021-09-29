@@ -6,14 +6,14 @@ let s:hex04 = "D8DEE9"
 let s:hex05 = "E5E9F0"
 let s:hex06 = "ECEFF4"
 let s:hex07 = "8FBCBB"
-let s:hex08 = "88C0D0"
-let s:hex09 = "81A1C1"
-let s:hex0A = "5E81AC"
-let s:hex0B = "BF616A"
-let s:hex0C = "D08770"
-let s:hex0D = "EBCB8B"
-let s:hex0E = "A3BE8C"
-let s:hex0F = "B48EAD"
+let s:hex08 = "BF616A"
+let s:hex09 = "D08770"
+let s:hex0A = "EBCB8B"
+let s:hex0B = "A3BE8C"
+let s:hex0C = "88C0D0"
+let s:hex0D = "81A1C1"
+let s:hex0E = "B48EAD"
+let s:hex0F = "5E81AC"
 
 let s:cterm00 = "00"
 let s:cterm03 = "08"
@@ -69,25 +69,45 @@ set noshowmode
 
 set laststatus=2
 
+let s:lastMode = ''
+
 function! RedrawModeColors(mode)
   " Normal mode
   if a:mode == 'n'
-    call <sid>modehi(s:hex04, s:hex02, s:hex04, s:hex02, s:cterm04, s:cterm02, s:cterm04, s:cterm02)
+    if s:lastMode != 'n'
+        call <sid>modehi(s:hex04, s:hex02, s:hex04, s:hex02, s:cterm04, s:cterm02, s:cterm04, s:cterm02)
+        let s:lastMode = 'n'
+    endif
   " Insert mode
   elseif a:mode == 'i'
-    call <sid>modehi(s:hex00, s:hex0E, s:hex04, s:hex02, s:cterm00, s:cterm0E, s:cterm0E, s:cterm02)
+    if s:lastMode != 'i'
+        call <sid>modehi(s:hex00, s:hex0E, s:hex04, s:hex02, s:cterm00, s:cterm0E, s:cterm0E, s:cterm02)
+        let s:lastMode = 'i'
+    endif
   " Replace mode
   elseif a:mode == 'R'
-    call <sid>modehi(s:hex00, s:hex08, s:hex04, s:hex02, s:cterm00, s:cterm08, s:cterm08, s:cterm02)
+    if s:lastMode != 'R'
+        call <sid>modehi(s:hex00, s:hex08, s:hex04, s:hex02, s:cterm00, s:cterm08, s:cterm08, s:cterm02)
+        let s:lastMode = 'R'
+    endif
   " Visual mode
   elseif a:mode == 'v' || a:mode == 'V' || a:mode == '^V'
-    call <sid>modehi(s:hex00, s:hex0A, s:hex04, s:hex02, s:cterm00, s:cterm0A, s:cterm0A, s:cterm02)
+    if s:lastMode != 'v'
+        call <sid>modehi(s:hex00, s:hex0A, s:hex04, s:hex02, s:cterm00, s:cterm0A, s:cterm0A, s:cterm02)
+        let s:lastMode = 'v'
+    endif
   " Command mode
   elseif a:mode == 'c'
-    call <sid>modehi(s:hex04, s:hex02, s:hex04, s:hex02, s:cterm04, s:cterm02, s:cterm04, s:cterm02)
+    if s:lastMode != 'c'
+        call <sid>modehi(s:hex04, s:hex02, s:hex04, s:hex02, s:cterm04, s:cterm02, s:cterm04, s:cterm02)
+        let s:lastMode = 'c'
+    endif
   " Terminal mode
   elseif a:mode == 't'
-    call <sid>modehi(s:hex04, s:hex02, s:hex04, s:hex02, s:cterm04, s:cterm02, s:cterm04, s:cterm02)
+    if s:lastMode != 't'
+        call <sid>modehi(s:hex04, s:hex02, s:hex04, s:hex02, s:cterm04, s:cterm02, s:cterm04, s:cterm02)
+        let s:lastMode = 't'
+    endif
   endif
   " Return empty string so as not to display anything in the statusline
   return ''
@@ -103,6 +123,8 @@ function! SetModifiedSymbol(modified, readonly)
     endif
 endfunction
 
+let s:lastWarningLevel = ''
+
 function! SetWarnings()
     let info = get(b:, 'coc_diagnostic_info', {})
     let errorCount = get(info, 'error', 0)
@@ -112,24 +134,36 @@ function! SetWarnings()
     let result = ''
 
     if errorCount
-        call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex08, "none", s:cterm08, "none")
-        call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex0A, s:hex08, s:cterm0A, s:cterm08)
-        let result = '  ' . errorCount . ' '
+        if s:lastWarningLevel != 4
+            call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex08, "none", s:cterm08, "none")
+            call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex0A, s:hex08, s:cterm0A, s:cterm08)
+            let s:lastWarningLevel = 4
+        endif
+        let result = '  ' . errorCount
     elseif warningCount
-        call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex0A, "none", s:cterm0A, "none")
-        call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex08, s:hex0A, s:cterm08, s:cterm0A)
-        let result = '  ' . warningCount . ' '
+        if s:lastWarningLevel != 3
+            call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex0A, "none", s:cterm0A, "none")
+            call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex08, s:hex0A, s:cterm08, s:cterm0A)
+            let s:lastWarningLevel = 3
+        endif
+        let result = '  ' . warningCount
     elseif infoCount
-        call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex0D, "none", s:cterm0D, "none")
-        call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex00, s:hex0D, s:cterm00, s:cterm0D)
-        let result = '  ' . infoCount . ' '
+        if s:lastWarningLevel != 2
+            call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex0D, "none", s:cterm0D, "none")
+            call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex00, s:hex0D, s:cterm00, s:cterm0D)
+            let s:lastWarningLevel = 2
+        endif
+        let result = '  ' . infoCount
     else
-        call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex0B, "none", s:cterm0B, "none")
-        call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex00, s:hex0B, s:cterm00, s:cterm0B)
+        if s:lastWarningLevel != 1
+            call g:Base16StatusLineHighlight("Base16StatusLineWarning", s:hex0B, "none", s:cterm0B, "none")
+            call g:Base16StatusLineHighlight("Base16StatusLineWarningBody", s:hex00, s:hex0B, s:cterm00, s:cterm0B)
+            let s:lastWarningLevel = 1
+        endif
         let result = '  '
     endif
 
-    return result
+    return result . get(g:, 'coc_status', '')
 endfunction
 
 " Statusbar items
