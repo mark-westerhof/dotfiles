@@ -244,7 +244,7 @@ let g:javascript_plugin_jsdoc = 1
 
 "coc
 function! InstallCocPlugins()
-    CocInstall coc-tsserver coc-tslint coc-json coc-git coc-css coc-eslint
+    CocInstall coc-tsserver coc-json coc-git coc-css coc-eslint
 endfunction
 
 set signcolumn=yes
