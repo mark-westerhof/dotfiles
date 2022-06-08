@@ -16,7 +16,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'tpope/vim-surround'
-Plug 'heavenshell/vim-jsdoc', {'tag': '1.0.0'}
+Plug 'heavenshell/vim-jsdoc', {
+  \ 'do': 'make install'
+\}
 Plug 'wavded/vim-stylus'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
