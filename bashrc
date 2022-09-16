@@ -4,7 +4,7 @@
 
 # Theme
 if [ -z $BASE_16_THEME ]; then
-    export BASE_16_THEME='ocean'
+    export BASE_16_THEME='onedark'
     shell_theme=$HOME/.base16_themes/base16-$BASE_16_THEME.sh
     if [ -f $shell_theme ]; then
         . $shell_theme
@@ -39,7 +39,6 @@ if [ -f "$HOME/.nvm/nvm.sh" ]; then
         nvm use --silent
     fi
 fi
-alias install-npm-dev-deps='npm install -g neovim yarn gulp @angular/cli'
 
 # SSH/clipboard
 alias ssh-clip-support="ssh -o SendEnv=BASE_16_THEME -R 6788:172.16.250.1:22"
