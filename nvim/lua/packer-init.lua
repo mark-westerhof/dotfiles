@@ -43,6 +43,7 @@ return require('packer').startup(function(use)
   use 'terrortylor/nvim-comment'
   use 'kylechui/nvim-surround'
   use 'roxma/vim-tmux-clipboard'
+  use 'windwp/nvim-autopairs'
 
   -- LSP
   use 'neovim/nvim-lspconfig'
