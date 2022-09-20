@@ -9,6 +9,8 @@ vim.opt.expandtab = true
 -- Turn on some features
 vim.opt.number = true
 vim.opt.spell = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
 
 -- Turn off some features
 vim.opt.wrap = false

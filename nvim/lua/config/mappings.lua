@@ -11,5 +11,18 @@ vim.api.nvim_set_keymap('n', 'fk', ':bp<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'fl', ':bl<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'fd', ':bp<bar>sp<bar>bn<bar>bd<CR>', { noremap = true, silent = true })
 
---Window shortcuts
+-- Window shortcuts
 vim.api.nvim_set_keymap('n', '<Leader>o', ':only<CR>', { noremap = true, silent = true })
+
+-- Quickfix shortcuts
+vim.api.nvim_set_keymap('n', ']q', ':cnext<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '[q', ':cprev<CR>', { noremap = true, silent = true })
+
+-- Copy pasting between vim instances and remote clipboard
+vim.api.nvim_set_keymap('v', '<Leader>y', ':w! /tmp/vim_clipboard<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('v', '<Leader>r', ':w! !ssh -p 6788 localhost pbcopy<CR><CMD>lua vim.notify("Text copied to remote clipboard")<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<Leader>p', ':r! cat /tmp/vim_clipboard<CR>', {noremap = true, silent = true})
+
+-- Find and replace selected (NOT WORKING)
+vim.api.nvim_set_keymap('v', '<C-r>', [[hy:.,$s/<C-r>h//g<left><left>]], {noremap = true, silent = true})
+vim.api.nvim_set_keymap('v', '<C-s>', [[hy:.,$s/<C-r>h//gc<left><left><left>]], {noremap = true, silent = true})
