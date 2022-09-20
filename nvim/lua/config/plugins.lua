@@ -2,8 +2,9 @@ return require('packer').startup(function(use)
 
   use 'wbthomason/packer.nvim'
 
-  -- Syntax highlighting
+  -- Syntax highlighting/formatting
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
+  use 'gpanders/editorconfig.nvim'
 
   -- Display plugins
   use 'RRethy/nvim-base16'
@@ -24,6 +25,7 @@ return require('packer').startup(function(use)
   use 'alexghergh/nvim-tmux-navigation'
   use 'terrortylor/nvim-comment'
   use 'kylechui/nvim-surround'
+  use 'roxma/vim-tmux-clipboard'
 
   -- LSP
   use 'neovim/nvim-lspconfig'

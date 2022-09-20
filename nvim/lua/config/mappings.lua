@@ -23,6 +23,6 @@ vim.api.nvim_set_keymap('v', '<Leader>y', ':w! /tmp/vim_clipboard<CR>', {noremap
 vim.api.nvim_set_keymap('v', '<Leader>r', ':w! !ssh -p 6788 localhost pbcopy<CR><CMD>lua vim.notify("Text copied to remote clipboard")<CR>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<Leader>p', ':r! cat /tmp/vim_clipboard<CR>', {noremap = true, silent = true})
 
--- Find and replace selected (NOT WORKING)
-vim.api.nvim_set_keymap('v', '<C-r>', [[hy:.,$s/<C-r>h//g<left><left>]], {noremap = true, silent = true})
-vim.api.nvim_set_keymap('v', '<C-s>', [[hy:.,$s/<C-r>h//gc<left><left><left>]], {noremap = true, silent = true})
+-- Find and replace selected
+vim.api.nvim_set_keymap('v', '<C-r>', '"hy:.,$s/<C-r>h//g<left><left>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('v', '<C-s>', '"hy:.,$s/<C-r>h//gc<left><left><left>', {noremap = true, silent = true})
