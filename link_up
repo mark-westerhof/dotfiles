@@ -43,9 +43,5 @@ nvm install --lts
 # NPM Dev Dependencies
 npm install -g gulp @angular/cli
 
-# Neovim Packer
-git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-
 # Vim Configuration
 ln -sf $CHECKOUT_PATH/nvim ~/.config/nvim
