@@ -17,7 +17,9 @@ return require('packer').startup(function(use)
 
   -- Syntax highlighting/formatting
   use {
-    'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
+    'nvim-treesitter/nvim-treesitter',
+    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
+  }
   use 'gpanders/editorconfig.nvim'
 
   -- Display plugins

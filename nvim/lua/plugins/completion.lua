@@ -133,20 +133,24 @@ end
 vim.api.nvim_set_keymap('n', '<Leader>fl', ':EslintFixAll<CR>', { noremap = true, silent = true })
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-require('lspconfig')['tsserver'].setup{
-  on_attach = on_attach,
-  flags = {
-    debounce_text_changes = 150,
-  },
-  capabilities = capabilities
+
+local servers = {
+  'tsserver',
+  'eslint',
+  'cssls',
+  'html',
+  'angularls'
 }
-require'lspconfig'.eslint.setup{
-  on_attach = on_attach,
-  flags = {
-    debounce_text_changes = 150,
-  },
-  capabilities = capabilities
-}
+
+for _, lsp in ipairs(servers) do
+  require('lspconfig')[lsp].setup{
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    },
+    capabilities = capabilities
+  }
+end
 
 require('luasnip.loaders.from_vscode').lazy_load()
 
