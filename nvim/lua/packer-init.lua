@@ -24,7 +24,7 @@ return require('packer').startup(function(use)
   use 'gpanders/editorconfig.nvim'
 
   -- Display plugins
-  use 'RRethy/nvim-base16'
+  use 'navarasu/onedark.nvim'
   use {'nvim-lualine/lualine.nvim', requires = 'kyazdani42/nvim-web-devicons'}
   use {'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons'}
   use {'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons'}

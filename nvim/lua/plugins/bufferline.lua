@@ -1,6 +1,9 @@
 require('bufferline').setup{
   options = {
     diagnostics = 'nvim_lsp',
+    indicator = {
+      style = 'none'
+    },
     offsets = {
       {
         filetype = 'NvimTree',
@@ -12,4 +15,4 @@ require('bufferline').setup{
 }
 
 -- Customizations
-vim.cmd([[highlight! link BufferLineOffsetSeparator LineNr]])
+vim.cmd([[highlight! link BufferLineOffsetSeparator NvimTreeVertSplit]])

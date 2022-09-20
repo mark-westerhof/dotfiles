@@ -21,6 +21,8 @@ dashboard.custom_header = {
     [[      /________/ /\    /            ]],
     [[      \________\/\ \  /             ]],
     [[                  \_\/              ]],
+    [[                                    ]],
+    [[                                    ]],
     [[                                    ]]
 }
 
@@ -29,11 +31,11 @@ dashboard.custom_center = {
      icon = '  ',
      desc = 'Find File                              ',
      action = 'Telescope find_files',
-     shortcut = 'SPC p'
+     shortcut = 'Space p'
    },
    {
      icon = '  ',
-     desc = 'File Browser                             ',
+     desc = 'File Browser                               ',
      action = 'NvimTreeToggle',
      shortcut = ', t'
    },

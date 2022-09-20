@@ -1,3 +1,5 @@
+vim.opt.termguicolors = true
+
 --Remap leader
 vim.g.mapleader = ','
 

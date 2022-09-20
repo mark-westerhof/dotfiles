@@ -4,7 +4,7 @@ require('core.base')
 require('core.mappings')
 
 require('plugins.nvim-treesitter')
-require('plugins.nvim-base16')
+require('plugins.onedark')
 require('plugins.lualine')
 require('plugins.bufferline')
 require('plugins.nvim-tree')
