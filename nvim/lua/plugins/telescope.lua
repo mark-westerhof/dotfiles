@@ -5,6 +5,9 @@ require('telescope').setup({
         ['<C-j>'] = 'move_selection_next',
         ['<C-k>'] = 'move_selection_previous'
       }
+    },
+    path_display = {
+      truncate = 1
     }
   }
 })
