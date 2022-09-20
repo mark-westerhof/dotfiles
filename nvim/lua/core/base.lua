@@ -19,6 +19,9 @@ vim.opt.hlsearch = false
 -- Stay in the same column while navigating up/down
 vim.opt.virtualedit = 'all'
 
+--Show trailing whitespace
+vim.cmd([[set list lcs=trail:·]])
+
 -- Exit insert mode
 vim.api.nvim_set_keymap('i', 'jk', '<Esc>', { noremap = true, silent = true })
 
