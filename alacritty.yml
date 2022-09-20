@@ -6,8 +6,10 @@ font:
         style: Regular
     bold:
         family: JetBrainsMono Nerd Font
-        style: Bold
-    size: 14
+        style: Regular
+    size: 14.5
+    offset:
+        y: 4
 mouse:
     hide_when_typing: true
 scrolling:
