@@ -22,7 +22,9 @@ vim.opt.hlsearch = false
 vim.opt.virtualedit = 'all'
 
 --Show trailing whitespace
-vim.cmd([[set list lcs=trail:·]])
+vim.opt.list = true
+vim.opt.listchars:append 'trail:·'
+vim.opt.listchars:append 'tab:»·'
 
 -- Exit insert mode
 vim.api.nvim_set_keymap('i', 'jk', '<Esc>', { noremap = true, silent = true })
