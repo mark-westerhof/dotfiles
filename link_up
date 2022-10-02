@@ -44,4 +44,5 @@ nvm install --lts
 npm install -g gulp @angular/cli
 
 # Vim Configuration
+mkdir -p ~/.config
 ln -sf $CHECKOUT_PATH/nvim ~/.config/nvim
