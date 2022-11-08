@@ -28,14 +28,26 @@ dashboard.custom_header = {
 
 dashboard.custom_center = {
    {
-     icon = '  ',
-     desc = 'Find File                              ',
+     icon = '  ',
+     desc = 'Find Files in Project                              ',
      action = 'Telescope find_files',
      shortcut = 'Space p'
    },
    {
-     icon = '  ',
-     desc = 'File Browser                               ',
+     icon = '  ',
+     desc = 'Find Files in Directory                            ',
+     action = 'Telescope find_files',
+     shortcut = 'Space d'
+   },
+   {
+     icon = '  ',
+     desc = 'Grep Pattern in Project                            ',
+     action = 'Telescope live_grep',
+     shortcut = 'Space g'
+   },
+   {
+     icon = '  ',
+     desc = 'File Browser                                          ',
      action = 'NvimTreeToggle',
      shortcut = ', t'
    },

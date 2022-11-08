@@ -78,7 +78,7 @@ cmp.setup({
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
   }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
@@ -138,7 +138,7 @@ end
 
 vim.api.nvim_set_keymap('n', '<Leader>fl', ':EslintFixAll<CR>', { noremap = true, silent = true })
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 local servers = {
   'tsserver',
@@ -160,43 +160,7 @@ end
 
 require('luasnip.loaders.from_vscode').lazy_load()
 
--- Utility functions shared between progress reports for LSP.
-
-local client_notifs = {}
-
-local function get_notif_data(client_id, token)
- if not client_notifs[client_id] then
-   client_notifs[client_id] = {}
- end
-
- if not client_notifs[client_id][token] then
-   client_notifs[client_id][token] = {}
- end
-
- return client_notifs[client_id][token]
-end
-
-
-local spinner_frames = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" }
-
-local function update_spinner(client_id, token)
- local notif_data = get_notif_data(client_id, token)
-
- if notif_data.spinner then
-   local new_spinner = (notif_data.spinner + 1) % #spinner_frames
-   notif_data.spinner = new_spinner
-
-   notif_data.notification = vim.notify(nil, nil, {
-     hide_from_history = true,
-     icon = spinner_frames[new_spinner],
-     replace = notif_data.notification,
-   })
-
-   vim.defer_fn(function()
-     update_spinner(client_id, token)
-   end, 100)
- end
-end
+local lsp_notif = require('plugins.lsp-notification')
 
 local function format_title(title, client_name)
  return client_name .. (#title > 0 and ": " .. title or "")
@@ -215,20 +179,20 @@ vim.lsp.handlers["$/progress"] = function(_, result, ctx)
     return
   end
 
-  local notif_data = get_notif_data(client_id, result.token)
+  local notif_data = lsp_notif.get_notif_data(client_id, result.token)
 
   if val.kind == "begin" then
     local message = format_message(val.message, val.percentage)
 
     notif_data.notification = vim.notify(message, "info", {
       title = format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
-      icon = spinner_frames[1],
+      icon = lsp_notif.spinner_frames[1],
       timeout = false,
       hide_from_history = false,
     })
 
     notif_data.spinner = 1
-    update_spinner(client_id, result.token)
+    lsp_notif.update_spinner(client_id, result.token)
   elseif val.kind == "report" and notif_data then
     notif_data.notification = vim.notify(format_message(val.message, val.percentage), "info", {
       replace = notif_data.notification,
