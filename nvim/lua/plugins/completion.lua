@@ -210,3 +210,5 @@ vim.lsp.handlers["$/progress"] = function(_, result, ctx)
   end
 end
 
+-- Debugging
+-- vim.lsp.set_log_level("debug")
