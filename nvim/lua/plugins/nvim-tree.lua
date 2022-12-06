@@ -22,14 +22,15 @@ local function hasValue (tab, val)
     return false
 end
 
-vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
-  callback = function()
-    local ft = vim.bo.filetype
-    if not treeInitialized and hasValue(openForFiletypes, ft) then
-      tree.toggle(true, true)
-      treeInitialized = true
-    end
-  end
-})
+-- Uncomment to automatically open tree for select filetypes.
+-- vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
+--   callback = function()
+--     local ft = vim.bo.filetype
+--     if not treeInitialized and hasValue(openForFiletypes, ft) then
+--       tree.toggle(true, true)
+--       treeInitialized = true
+--     end
+--   end
+-- })
 
 vim.api.nvim_set_keymap('n', '<Leader>t', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
