@@ -8,7 +8,12 @@ require('fzf-lua').setup{
     }
   },
   winopts = {
-    hl = { border = 'LineNR', }
+    hl = { border = 'LineNR', },
+    height = 0.9,
+    width = 0.9,
+    preview = {
+      layout = 'vertical'
+    }
   },
   fzf_colors = {
     ['fg'] = { 'fg', 'Normal' },
@@ -27,7 +32,7 @@ require('fzf-lua').setup{
   }
 }
 
-vim.api.nvim_set_keymap('n', '<Space>p', ':lua require("fzf-lua").files()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<Space>d', ':lua require("fzf-lua").files({ cwd = vim.fn.expand("%:p:h") })<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Space>p', ':lua require("fzf-lua").files({ fzf_opts = {["--keep-right"] = ""} })<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Space>d', ':lua require("fzf-lua").files({ cwd = vim.fn.expand("%:p:h"), fzf_opts = {["--keep-right"] = ""} })<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<space>g', ':lua require("fzf-lua").live_grep({ cmd = "git grep --line-number --column --color=always" })<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<C-g>', '"hy:lua require("fzf-lua").live_grep({ cmd = "git grep --line-number --column --color=always", search = vim.fn.getreg("h") })<CR>', { noremap = true, silent = true })
