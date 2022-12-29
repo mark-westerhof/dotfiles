@@ -45,7 +45,7 @@ GPG_TTY=$(tty)
 export GPG_TTY
 
 # SSH/clipboard
-alias ssh-clip-support="ssh -o SendEnv=BASE_16_THEME -R 6788:172.16.250.1:22"
+alias ssh-clip-support="ssh -o SendEnv=BASE_16_THEME -R 6788:localhost:22"
 alias remoteclip='ssh -p 6788 localhost pbcopy'
 alias sendbuffer='tmux show-buffer | remoteclip'
 
