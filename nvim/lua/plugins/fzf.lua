@@ -23,7 +23,6 @@ require('fzf-lua').setup{
     ['bg'] = { 'bg', 'Normal' },
     ['bg+'] = { 'bg', 'Normal' },
     ['info'] = { 'fg', 'Normal' },
-    ['border'] = { 'fg', 'Ignore' },
     ['prompt'] = { 'fg', 'Normal' },
     ['pointer'] = { 'fg', 'Conditional' },
     ['marker'] = { 'fg', 'Conditional' },
