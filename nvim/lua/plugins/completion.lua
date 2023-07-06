@@ -144,7 +144,8 @@ local servers = {
   'tsserver',
   'eslint',
   'cssls',
-  'html'
+  'html',
+  'angularls'
 }
 
 for _, lsp in ipairs(servers) do

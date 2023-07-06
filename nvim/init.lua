@@ -18,7 +18,6 @@ require('plugins.nvim-tmux-navigation')
 require('plugins.nvim-comment')
 require('plugins.nvim-surround')
 require('plugins.nvim-autopairs')
-require('plugins.mason')
 require('plugins.code-action-menu')
 
 require('plugins.completion')
