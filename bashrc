@@ -75,6 +75,25 @@ grep -v -E "^linux-|^tools|^cooked|^tests" |
 ctags -R -L -'
 alias gerrit-review-push='git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)'
 
+# Install npm dev dependencie
+ANGULAR_VERSION=14
+
+function install-npm-dev-deps() {
+  npm_install_pkgs=(
+      # Required for https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#tsserver
+      typescript
+      typescript-language-server
+      # Required for https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#eslint and
+      # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#cssls and
+      # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#html
+      vscode-langservers-extracted
+      # Required for CLI utility and https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#angularls
+      @angular/cli@$ANGULAR_VERSION
+      @angular/language-server@$ANGULAR_VERSION
+  )
+  npm install -g "${npm_install_pkgs[@]}"
+}
+
 # Print 256 color map for reference
 function printcolors() {
     n=${1-16}
