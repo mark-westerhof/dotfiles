@@ -75,10 +75,12 @@ grep -v -E "^linux-|^tools|^cooked|^tests" |
 ctags -R -L -'
 alias gerrit-review-push='git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)'
 
-# Install npm dev dependencie
-ANGULAR_VERSION=14
-
+# Install npm dev dependencies
 function install-npm-dev-deps() {
+  local ng_version
+  echo "Angular version?"
+  read ng_version
+
   npm_install_pkgs=(
       # Required for https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#tsserver
       typescript
@@ -88,8 +90,8 @@ function install-npm-dev-deps() {
       # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#html
       vscode-langservers-extracted
       # Required for CLI utility and https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#angularls
-      @angular/cli@$ANGULAR_VERSION
-      @angular/language-server@$ANGULAR_VERSION
+      @angular/cli@$ng_version
+      @angular/language-server@$ng_version
   )
   npm install -g "${npm_install_pkgs[@]}"
 }
