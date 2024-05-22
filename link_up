@@ -7,6 +7,7 @@ BASE_16_URI='https://github.com/chriskempson/base16-shell'
 rm -rf base16-shell
 rm -rf ~/.fzf*
 rm -rf ~/.nvm
+rm -rf ~/.volta
 rm -f ~/.config/nvim
 rm -rf ~/.local/share/nvim
 
@@ -35,10 +36,20 @@ fi
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --completion --key-bindings --no-update-rc --no-zsh --no-fish
 
-# NVM & Node
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-source ~/.nvm/nvm.sh
-nvm install --lts
+# Volta & Node
+curl https://get.volta.sh | bash -s -- --skip-setup
+PATH="$HOME/.volta/bin:$PATH"
+volta install node
+
+npm install -g neovim
+# Required for https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#tsserver
+npm install -g typescript typescript-language-server
+# Required for https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#eslint and
+# https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#cssls and
+# https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#html
+npm install -g vscode-langservers-extracted
+# Required for CLI utility and https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#angularls
+npm install -g @angular/cli@$ng_version @angular/language-server@$ng_version
 
 # Vim Configuration
 mkdir -p ~/.config

@@ -26,7 +26,7 @@ return require('packer').startup(function(use)
   -- Display plugins
   use 'navarasu/onedark.nvim'
   use {'nvim-lualine/lualine.nvim', requires = 'nvim-tree/nvim-web-devicons'}
-  use {'akinsho/bufferline.nvim', tag = "v3.*", requires = 'nvim-tree/nvim-web-devicons'}
+  use {'akinsho/bufferline.nvim', tag = "v4.5.3", requires = 'nvim-tree/nvim-web-devicons'}
   use {'nvim-tree/nvim-tree.lua', requires = 'nvim-tree/nvim-web-devicons'}
   use {'lewis6991/gitsigns.nvim', tag = 'release'}
   use 'lukas-reineke/indent-blankline.nvim'
@@ -45,7 +45,7 @@ return require('packer').startup(function(use)
   use 'windwp/nvim-autopairs'
 
   -- LSP
-  use 'neovim/nvim-lspconfig'
+  use {'neovim/nvim-lspconfig', branch = 'v0.1.7'}
 
   -- LSP & Completion
   use 'hrsh7th/cmp-nvim-lsp'

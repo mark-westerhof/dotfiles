@@ -7,6 +7,7 @@ esac
 # Path
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
+[ -d "$HOME/.volta" ] && VOLTA_HOME="$HOME/.volta" && PATH="$VOLTA_HOME/bin:$PATH"
 
 # Theme
 if [ -z $BASE_16_THEME ]; then
@@ -33,18 +34,6 @@ export HISTCONTROL=erasedups
 [ -f "$HOME/.fzf.bash" ] && source $HOME/.fzf.bash
 export FZF_DEFAULT_COMMAND='rg --files'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
-# Node/NPM
-if [ -f "$HOME/.nvm/nvm.sh" ]; then
-    export NVM_DIR="$HOME/.nvm"
-    source $NVM_DIR/nvm.sh
-    if [ -f "$NVM_DIR/bash_completion" ]; then
-        source $NVM_DIR/bash_completion
-    fi
-    if [ -f ".nvmrc" ]; then
-        nvm use --silent
-    fi
-fi
 
 # gpg-agent for SVN
 GPG_TTY=$(tty)
@@ -74,27 +63,6 @@ alias create-fos-tags='git ls-files | grep -E "*\.(c|cpp|h)$" |
 grep -v -E "^linux-|^tools|^cooked|^tests" |
 ctags -R -L -'
 alias gerrit-review-push='git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)'
-
-# Install npm dev dependencies
-function install-npm-dev-deps() {
-  local ng_version
-  echo "Angular version?"
-  read ng_version
-
-  npm_install_pkgs=(
-      # Required for https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#tsserver
-      typescript
-      typescript-language-server
-      # Required for https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#eslint and
-      # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#cssls and
-      # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#html
-      vscode-langservers-extracted
-      # Required for CLI utility and https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#angularls
-      @angular/cli@$ng_version
-      @angular/language-server@$ng_version
-  )
-  npm install -g "${npm_install_pkgs[@]}"
-}
 
 # Print 256 color map for reference
 function printcolors() {
