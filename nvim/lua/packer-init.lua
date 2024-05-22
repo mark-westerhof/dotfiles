@@ -33,7 +33,12 @@ return require('packer').startup(function(use)
   use 'rcarriga/nvim-notify'
 
   -- Searching
-  use {'ibhagwan/fzf-lua'}
+  use { 'nvim-telescope/telescope.nvim', requires = {
+    {'nvim-lua/plenary.nvim'},
+    { 'nvim-telescope/telescope-live-grep-args.nvim' }
+  } }
+  use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+
   use {'phaazon/hop.nvim', branch = 'v2'}
   use {'tpope/vim-fugitive'}
 
@@ -45,7 +50,7 @@ return require('packer').startup(function(use)
   use 'windwp/nvim-autopairs'
 
   -- LSP
-  use {'neovim/nvim-lspconfig', branch = 'v0.1.7'}
+  use {'neovim/nvim-lspconfig'}
 
   -- LSP & Completion
   use 'hrsh7th/cmp-nvim-lsp'
