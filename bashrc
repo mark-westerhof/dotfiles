@@ -84,11 +84,5 @@ function devsession() {
 
 # FOS development config helper
 function conf-fos-model() {
-    ./Configure -m $1 -dy -v $(git rev-parse --abbrev-ref HEAD)
-}
-
-# Source code indexing
-function create-cscope-db() {
-    rm -f cscope.*
-    cscope -R -b -q -k
+    CONFIG_BUILD_GUI_ARTIFACTS=y ./Configure -m $1 -dy -v $(git rev-parse --abbrev-ref HEAD)
 }

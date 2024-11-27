@@ -141,7 +141,7 @@ vim.api.nvim_set_keymap('n', '<Leader>fl', ':EslintFixAll<CR>', { noremap = true
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 local servers = {
-  'tsserver',
+  'ts_ls',
   'eslint',
   'cssls',
   'html',

@@ -26,7 +26,7 @@ return require('packer').startup(function(use)
   -- Display plugins
   use 'navarasu/onedark.nvim'
   use {'nvim-lualine/lualine.nvim', requires = 'nvim-tree/nvim-web-devicons'}
-  use {'akinsho/bufferline.nvim', tag = "v4.5.3", requires = 'nvim-tree/nvim-web-devicons'}
+  use {'akinsho/bufferline.nvim', requires = 'nvim-tree/nvim-web-devicons'}
   use {'nvim-tree/nvim-tree.lua', requires = 'nvim-tree/nvim-web-devicons'}
   use {'lewis6991/gitsigns.nvim', tag = 'release'}
   use 'lukas-reineke/indent-blankline.nvim'
