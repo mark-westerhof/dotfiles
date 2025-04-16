@@ -33,3 +33,6 @@ vim.api.nvim_set_keymap('i', 'jk', '<Esc>', { noremap = true, silent = true })
 -- Better split behaviour
 vim.opt.splitbelow = true
 vim.opt.splitright = true
+
+-- Ensure file changes trigger watch (https://www.jaykim.earth/posts/2023-06-28-gotchas-using-fs-watch-with-vim)
+vim.opt.backupcopy = 'yes'

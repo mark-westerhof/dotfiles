@@ -63,19 +63,29 @@ local function getCurrentFolderPath()
   return vim.fn.expand("%:p:h")
 end
 
-vim.keymap.set('n', '<Space>p', builtin.find_files, {})
+vim.keymap.set('n', '<Space>p', function()
+  builtin.find_files(
+  {
+    path_display = { "truncate" },
+  }
+  )
+end)
 vim.keymap.set('n', '<Space>d', function()
   builtin.find_files(
   {
+    path_display = { "truncate" },
     search_dirs = { getCurrentFolderPath() }
   }
   )
 end)
 vim.keymap.set('n', '<Space>g', function()
-  telescope.extensions.live_grep_args.live_grep_args()
+  telescope.extensions.live_grep_args.live_grep_args({
+    path_display = { "truncate" }
+  })
 end)
 vim.keymap.set('v', '<C-g>', function() 
   telescope.extensions.live_grep_args.live_grep_args({
+    path_display = { "truncate" },
     default_text = get_visual_selection()
   })
 end)
