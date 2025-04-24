@@ -26,3 +26,6 @@ vim.api.nvim_set_keymap('n', '<Leader>p', ':r! cat /tmp/vim_clipboard<CR>', {nor
 -- Find and replace selected
 vim.api.nvim_set_keymap('v', '<C-r>', '"hy:.,$s/<C-r>h//g<left><left>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('v', '<C-s>', '"hy:.,$s/<C-r>h//gc<left><left><left>', {noremap = true, silent = true})
+
+-- Copy buffer filename to register
+vim.api.nvim_set_keymap('n', '<Leader>cbf', ':let @+ = expand("%:p")<CR>', { noremap = true, silent = true })

@@ -1,0 +1,10 @@
+user-input-color: white
+tool-output-color: magenta
+tool-error-color: red
+tool-warning-color: yellow
+assistant-output-color: blue
+completion-menu-color: white
+completion-menu-bg-color: default
+completion-menu-current-color: white
+completion-menu-current-bg-color: blue
+code-theme: monokai

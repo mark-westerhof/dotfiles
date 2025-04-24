@@ -18,6 +18,7 @@ vim.opt.smartcase = true
 vim.opt.wrap = false
 vim.opt.hlsearch = false
 vim.opt.mouse = ''
+vim.opt.cmdheight = 0
 
 -- Stay in the same column while navigating up/down
 vim.opt.virtualedit = 'all'

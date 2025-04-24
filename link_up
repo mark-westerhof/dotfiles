@@ -32,6 +32,9 @@ else
     ln -sf $CHECKOUT_PATH/bashrc ~/.bashrc
 fi
 
+# Aider configuration
+ln -sf $CHECKOUT_PATH/aider.conf.yml ~/.aider.conf.yml
+
 # FZF
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --completion --key-bindings --no-update-rc --no-zsh --no-fish
@@ -50,6 +53,9 @@ npm install -g typescript typescript-language-server
 npm install -g vscode-langservers-extracted
 # Required for CLI utility and https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#angularls
 npm install -g @angular/cli@17.3 @angular/language-server@17.3
+
+# Aider
+wget -qO- https://aider.chat/install.sh | sh
 
 # Vim Configuration
 mkdir -p ~/.config

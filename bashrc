@@ -34,6 +34,10 @@ export HISTCONTROL=erasedups
 [ -f "$HOME/.fzf.bash" ] && source $HOME/.fzf.bash
 export FZF_DEFAULT_COMMAND='rg --files'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_OPTS='--tmux'
+
+# API keys
+[ -f "$HOME/.api-keys.bash" ] && source $HOME/.api-keys.bash
 
 # gpg-agent for SVN
 GPG_TTY=$(tty)
@@ -43,6 +47,23 @@ export GPG_TTY
 alias ssh-clip-support="ssh -o SendEnv=BASE_16_THEME -R 6788:localhost:22"
 alias remoteclip='ssh -p 6788 localhost pbcopy'
 alias sendbuffer='tmux show-buffer | remoteclip'
+
+# Aider
+alias aid='aider --no-gitignore --subtree-only --chat-language english'
+
+function aid-subdir() {
+    directory=$(dirname $1)
+    filename=$(basename $1)
+    depth=${2:-0}
+    cd $directory
+
+    while [ $depth -gt 0 ]; do
+      cd ..
+      depth=$((depth - 1))
+    done
+
+    aid $1
+}
 
 function remotesend() {
     scp -P 6788 $1 localhost:~/Downloads
