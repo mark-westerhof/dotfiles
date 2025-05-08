@@ -11,6 +11,4 @@ alias ll='ls -l'
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-    . $(brew --prefix)/etc/bash_completion
-fi
+[[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . $(brew --prefix)/etc/profile.d/bash_completion.sh
