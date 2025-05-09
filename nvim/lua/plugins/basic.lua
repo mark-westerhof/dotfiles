@@ -15,5 +15,9 @@ return {
     end
   },
   { 'kylechui/nvim-surround', opts = {} },
-  { 'aserowy/tmux.nvim', options = {} }
+  {
+    'aserowy/tmux.nvim',
+    opts = {
+    }
+  }
 }

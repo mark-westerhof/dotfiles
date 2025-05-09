@@ -12,7 +12,7 @@ rm -f ~/.config/nvim
 rm -rf ~/.local/share/nvim
 
 # Terminal Configuration
-ln -sf $CHECKOUT_PATH/alacritty.yml ~/.alacritty.yml
+ln -sf $CHECKOUT_PATH/alacritty.toml ~/.alacritty.toml
 
 # Base 16 Theming
 git clone $BASE_16_URI
