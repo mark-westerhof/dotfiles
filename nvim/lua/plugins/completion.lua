@@ -150,6 +150,7 @@ return {
       end
 
       vim.api.nvim_set_keymap('n', '<Leader>fl', ':EslintFixAll<CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<Leader>rlsp', ':LspRestart<CR>', { noremap = true, silent = true })
 
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
