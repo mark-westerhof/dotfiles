@@ -1,0 +1,30 @@
+[[keyboard.bindings]]
+action = "SpawnNewInstance"
+key = "N"
+mods = "Control|Shift"
+
+[env]
+TERM = "screen-256color"
+
+[font]
+size = 14.5
+
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[font.offset]
+y = 4
+
+[mouse]
+hide_when_typing = true
+
+[scrolling]
+history = 0
+multiplier = 0
+
+[keyboard]
