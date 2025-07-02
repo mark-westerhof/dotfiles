@@ -45,13 +45,13 @@ PATH="$HOME/.volta/bin:$PATH"
 volta install node
 
 npm install -g neovim
-# Required for https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#tsserver
-npm install -g typescript typescript-language-server
-# Required for https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#eslint and
-# https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#cssls and
-# https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#html
+# Required for https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#vtsls
+npm install -g typescript @vtsls/language-server
+# Rquired for https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#eslint and
+# https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#cssls and
+# https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#html
 npm install -g vscode-langservers-extracted
-# Required for CLI utility and https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#angularls
+# Required for CLI utility and https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#angularls
 npm install -g @angular/cli@17.3 @angular/language-server@17.3
 
 # Aider
