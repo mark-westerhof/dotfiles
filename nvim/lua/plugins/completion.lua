@@ -163,13 +163,14 @@ return {
       }
 
       for _, lsp in ipairs(servers) do
-        require('lspconfig')[lsp].setup{
+        vim.lsp.config(lsp, {
           on_attach = on_attach,
           flags = {
             debounce_text_changes = 150,
           },
           capabilities = capabilities
-        }
+        })
+        vim.lsp.enable(lsp)
       end
 
       require('luasnip.loaders.from_vscode').lazy_load()

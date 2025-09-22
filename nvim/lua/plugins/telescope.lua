@@ -87,6 +87,13 @@ return {
         }
         )
       end)
+      vim.keymap.set('n', '<Space>l', function()
+        builtin.diagnostics(
+        {
+          bufnr = 0
+        }
+        )
+      end)
       vim.keymap.set('n', '<Space>g', function()
         telescope.extensions.live_grep_args.live_grep_args({
           path_display = { "truncate" }

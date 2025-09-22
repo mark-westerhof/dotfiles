@@ -1,5 +1,3 @@
-lint-cmd:
-  - npm run lint
 user-input-color: white
 tool-output-color: magenta
 tool-error-color: red
