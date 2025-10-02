@@ -134,22 +134,18 @@ return {
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
       end
 
-      local on_attach = function(client, bufnr)
-        -- Mappings.
-        -- See `:help vim.lsp.*` for documentation on any of the below functions
-        local bufopts = { noremap=true, silent=true, buffer=bufnr }
-        vim.keymap.set('n', '[g', vim.diagnostic.goto_prev, opts)
-        vim.keymap.set('n', ']g', vim.diagnostic.goto_next, opts)
-        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-        vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-        vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, bufopts)
-        vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-      end
+      local bufopts = { noremap=true, silent=true, buffer=bufnr }
+      vim.keymap.set('n', '[g', vim.diagnostic.goto_prev, opts)
+      vim.keymap.set('n', ']g', vim.diagnostic.goto_next, opts)
+      vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+      vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+      vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+      vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, bufopts)
+      vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
 
-      vim.api.nvim_set_keymap('n', '<Leader>fl', ':EslintFixAll<CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<Leader>fl', ':LspEslintFixAll<CR>', { noremap = true, silent = true })
       vim.api.nvim_set_keymap('n', '<Leader>rlsp', ':LspRestart<CR>', { noremap = true, silent = true })
 
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -164,7 +160,6 @@ return {
 
       for _, lsp in ipairs(servers) do
         vim.lsp.config(lsp, {
-          on_attach = on_attach,
           flags = {
             debounce_text_changes = 150,
           },
