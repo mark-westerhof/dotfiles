@@ -160,8 +160,7 @@ return {
         'vtsls',
         'eslint',
         'cssls',
-        'html',
-        'angularls'
+        'html'
       }
 
       for _, lsp in ipairs(servers) do
@@ -173,6 +172,83 @@ return {
         })
         vim.lsp.enable(lsp)
       end
+
+      local function find_angular_project_root()
+        local current_dir = vim.fn.expand('%:p:h') -- Start from current file's directory
+        local git_root = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
+
+        if vim.v.shell_error ~= 0 then
+          git_root = vim.fn.getcwd() -- Fallback to cwd if not in git repo
+        end
+
+        while current_dir and current_dir ~= '/' and current_dir:find(git_root, 1, true) == 1 do
+          local node_modules = current_dir .. '/node_modules'
+          local angular_core = node_modules .. '/@angular/core'
+
+          if vim.fn.isdirectory(node_modules) == 1 and vim.fn.isdirectory(angular_core) == 1 then
+            return current_dir
+          end
+
+          current_dir = vim.fn.fnamemodify(current_dir, ':h')
+        end
+
+        return nil
+      end
+
+      local function get_angular_core_version(root_dir)
+        local package_json = root_dir .. '/package.json'
+        if not vim.loop.fs_stat(package_json) then
+          return ''
+        end
+
+        local ok, content = pcall(vim.fn.readfile, package_json)
+        if not ok or not content then
+          return ''
+        end
+
+        local json_str = table.concat(content, '\n')
+        local json = vim.json.decode(json_str) or {}
+
+        local version = (json.dependencies or {})['@angular/core'] or ''
+        return version:match('%d+%.%d+%.%d+') or ''
+      end
+
+      vim.lsp.config('angularls', {
+        flags = {
+          debounce_text_changes = 150,
+        },
+        capabilities = capabilities,
+        root_dir = function(bufnr, on_dir)
+          local angular_root = find_angular_project_root()
+          if angular_root then
+            on_dir(angular_root)
+          end
+        end,
+        cmd = function(dispatchers, config)
+          local root_dir = (config and config.root_dir) or vim.fn.getcwd()
+          local node_modules = config.root_dir .. '/node_modules'
+          local angular_version = get_angular_core_version(root_dir)
+          local ts_probe = node_modules
+          local ng_probe = node_modules .. '/@angular/language-server/node_modules'
+
+          local cmd = {
+            "ngserver",
+            "--stdio",
+            "--tsProbeLocations", ts_probe,
+            "--ngProbeLocations", ng_probe
+          }
+
+          if angular_version ~= '' then
+            table.insert(cmd, "--angularCoreVersion")
+            table.insert(cmd, angular_version)
+          end
+
+          -- cwd is important so that volta can use the local ngserver
+          return vim.lsp.rpc.start(cmd, dispatchers, { cwd = root_dir })
+        end
+      })
+
+      vim.lsp.enable('angularls')
 
       require('luasnip.loaders.from_vscode').lazy_load()
 
