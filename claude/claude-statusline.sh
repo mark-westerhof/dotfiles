@@ -9,8 +9,8 @@ used=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 # Get git branch
 branch=$(git branch --show-current 2>/dev/null || echo "no-git")
 
-# Build status line
-status="$model | $branch"
+# Build status line (using Nerd Font icons)
+status="󰚩 $model | 󰊢 $branch"
 
 if [ -n "$used" ]; then
   status="$status | Context: ${used}%"
