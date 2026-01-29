@@ -1,35 +1,19 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
+    lazy = false,
     build = ':TSUpdate',
-    config = function ()
-      local configs = require("nvim-treesitter.configs")
-      configs.setup({
-        ensure_installed = {
-          "bash",
-          "c",
-          "comment",
-          "css",
-          "html",
-          "javascript",
-          "jsdoc",
-          "jsonc",
-          "lua",
-          "markdown",
-          "markdown_inline",
-          "query",
-          "regex",
-          "scss",
-          "typescript",
-          "vim",
-          "vimdoc",
-          "yaml",
-        },
-        sync_install = false,
-        auto_install = true,
-        highlight = { enable = true },
-        indent = { enable = true}
+    config = function()
+      require('nvim-treesitter').setup {
+        install_dir = vim.fn.stdpath('data') .. '/site',
+      }
+
+      -- Enable treesitter-based highlighting and indentation per buffer
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+          pcall(vim.treesitter.start, args.buf)
+        end,
       })
-    end
+    end,
   }
 }
