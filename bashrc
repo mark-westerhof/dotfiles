@@ -80,6 +80,7 @@ alias fgtdev-port='fos-dev conf get ssh_port | awk -F ": " "{print \$2}"'
 alias sshfgt='ssh -p $(fgtdev-port) $(fgtdev-admin)@$(fgtdev-fgt)'
 
 # Development aliases
+alias c='claude'
 alias create-fos-tags='git ls-files | grep -E "*\.(c|cpp|h)$" |
 grep -v -E "^linux-|^tools|^cooked|^tests" |
 ctags -R -L -'
