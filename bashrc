@@ -104,6 +104,44 @@ function devsession() {
     (cd $directory && tmux new -s $directory)
 }
 
+# Git worktree + tmux session helper
+function worksession() {
+    if [ $# -lt 3 ]; then
+        echo "Usage: worksession <repo-dir> <branch-name> <base-branch>"
+        return 1
+    fi
+
+    directory=${1%/}
+    branch=$2
+    base=$3
+    session_name="${directory}-${branch}"
+    repo_name="$(basename "$directory")"
+    repo_parent="$(dirname "$directory")"
+    worktree_path="${repo_parent}/${repo_name}-${branch}"
+
+    if [ ! -d "$directory/.git" ]; then
+        echo "Error: '$directory' is not a git repository"
+        return 1
+    fi
+
+    if (cd "$directory" && git show-ref --verify --quiet "refs/heads/$branch"); then
+        echo "Error: branch '$branch' already exists"
+        return 1
+    fi
+
+    if [ -d "$worktree_path" ]; then
+        echo "Error: worktree directory '$worktree_path' already exists"
+        return 1
+    fi
+
+    if ! (cd "$directory" && git worktree add "../${repo_name}-${branch}" -b "$branch" "$base"); then
+        echo "Error: failed to create worktree"
+        return 1
+    fi
+
+    (cd "$worktree_path" && tmux new -s "$session_name")
+}
+
 # FOS development config helper
 function conf-fos-model() {
     CONFIG_BUILD_GUI_ARTIFACTS=y ./Configure -m $1 -dy -v $(git rev-parse --abbrev-ref HEAD)
