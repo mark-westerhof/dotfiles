@@ -34,7 +34,6 @@ fi
 
 # Claude Code configuration
 mkdir -p ~/.claude
-ln -sf $CHECKOUT_PATH/claude/settings.json ~/.claude/settings.json
 ln -sf $CHECKOUT_PATH/claude/claude-statusline.sh ~/claude-statusline.sh
 
 # FZF
