@@ -8,6 +8,7 @@ esac
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/.volta" ] && VOLTA_HOME="$HOME/.volta" && PATH="$VOLTA_HOME/bin:$PATH"
+[ -d "$HOME/.opencode/bin" ] && PATH="$HOME/.opencode/bin:$PATH"
 
 # Theme
 if [ -z $BASE_16_THEME ]; then
@@ -147,3 +148,4 @@ function worksession() {
 function conf-fos-model() {
     CONFIG_BUILD_GUI_ARTIFACTS=y ./Configure -m $1 -dy -v $(git rev-parse --abbrev-ref HEAD)
 }
+

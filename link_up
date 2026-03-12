@@ -32,7 +32,7 @@ else
     ln -sf $CHECKOUT_PATH/bashrc ~/.bashrc
 fi
 
-# Claude Code configuration
+# Claude Code and Opencode configuration
 mkdir -p ~/.claude
 ln -sf $CHECKOUT_PATH/claude/claude-statusline.sh ~/claude-statusline.sh
 
@@ -58,6 +58,9 @@ npm install -g @angular/cli @angular/language-server
 
 # Claude Code CLI
 curl -fsSL https://claude.ai/install.sh | bash
+
+# Opencode
+curl -fsSL https://opencode.ai/install | bash
 
 # Vim Configuration
 mkdir -p ~/.config
