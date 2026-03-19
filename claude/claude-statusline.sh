@@ -5,14 +5,20 @@ input=$(cat)
 # Extract data
 model=$(echo "$input" | jq -r '.model.display_name')
 used=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
-effort=$(jq -r '.effortLevel // empty' ~/.claude/settings.json 2>/dev/null)
-effort="${effort:-high}"
+context_size=$(echo "$input" | jq -r '.context_window.context_window_size // empty')
+
+context_label="Context:"
+if [ -n "$FTNT_CLAUDE_CONTEXT_WINDOW" ] && [ -n "$context_size" ] && [ -n "$used" ]; then
+  used=$(( used * context_size / FTNT_CLAUDE_CONTEXT_WINDOW ))
+  ctx_k=$(( FTNT_CLAUDE_CONTEXT_WINDOW / 1024 ))
+  context_label="Context (${ctx_k}k):"
+fi
 
 # Get git branch
 branch=$(git branch --show-current 2>/dev/null || echo "no-git")
 
 # Build status line (using Nerd Font icons)
-status="󰚩 $model | 󰊢 $branch | 󱗆 $effort"
+status="󰚩 $model | 󰊢 $branch"
 
 if [ -n "$used" ]; then
   # Dot icons (Nerd Font octicons)
@@ -43,7 +49,7 @@ if [ -n "$used" ]; then
   for (( i=0; i<filled; i++ )); do dots+="$dot_fill"; done
   for (( i=0; i<unfilled; i++ )); do dots+="$dot_empty"; done
 
-  status="$status | Context: ${color}${dots} ${used}%${reset}"
+  status="$status | ${context_label} ${color}${dots} ${used}%${reset}"
 fi
 
 echo -e "$status"
