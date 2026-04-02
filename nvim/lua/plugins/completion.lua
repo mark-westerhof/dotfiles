@@ -63,8 +63,14 @@ return {
           end,
         },
         window = {
-          -- completion = cmp.config.window.bordered(),
-          -- documentation = cmp.config.window.bordered(),
+          completion = {
+            border = 'single',
+            winhighlight = 'Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+          },
+          documentation = {
+            border = 'single',
+            winhighlight = 'Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+          },
         },
         mapping = cmp.mapping.preset.insert({
           ["<Tab>"] = cmp.mapping(function(fallback)
@@ -133,26 +139,29 @@ return {
         signs = {
           text = {
             [vim.diagnostic.severity.ERROR] = signs.Error,
-            [vim.diagnostic.severity.WARN]  = signs.Warn,
+            [vim.diagnostic.severity.WARN]  = signs.Warning,
             [vim.diagnostic.severity.HINT]  = signs.Hint,
-            [vim.diagnostic.severity.INFO]  = signs.Info,
+            [vim.diagnostic.severity.INFO]  = signs.Information,
           },
         },
       })
 
-      local bufopts = { noremap=true, silent=true, buffer=bufnr }
+      local opts = { noremap = true, silent = true }
       vim.keymap.set('n', '[g', vim.diagnostic.goto_prev, opts)
       vim.keymap.set('n', ']g', vim.diagnostic.goto_next, opts)
-      vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-      vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-      vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-      vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, bufopts)
-      vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+      vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
 
-      vim.api.nvim_set_keymap('n', '<Leader>fl', ':LspEslintFixAll<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<Leader>rlsp', ':LspRestart<CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<Leader>fl', ':LspEslintFixAll<CR>', opts)
+      vim.api.nvim_set_keymap('n', '<Leader>rlsp', ':LspRestart<CR>', opts)
+
+      vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client:supports_method('textDocument/documentColor') then
+            vim.lsp.document_color.enable(true, args.buf)
+          end
+        end,
+      })
 
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
@@ -197,7 +206,7 @@ return {
 
       local function get_angular_core_version(root_dir)
         local package_json = root_dir .. '/package.json'
-        if not vim.loop.fs_stat(package_json) then
+        if not vim.uv.fs_stat(package_json) then
           return ''
         end
 

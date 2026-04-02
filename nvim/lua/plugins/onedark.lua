@@ -20,6 +20,7 @@ return {
 
       -- https://github.com/yetone/avante.nvim/issues/1705
       vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal" })
+      vim.api.nvim_set_hl(0, "FloatBorder", { fg = "#848b98", bg = "NONE" })
     end
   }
 }

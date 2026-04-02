@@ -1,9 +1,3 @@
--- Window navigation
-vim.api.nvim_set_keymap('n', '<C-h>', ':wincmd h<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<C-j>', ':wincmd j<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<C-k>', ':wincmd k<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<C-l>', ':wincmd l<CR>', { noremap = true, silent = true })
-
 -- Buffer navigation
 vim.api.nvim_set_keymap('n', 'fg', ':bf<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'fj', ':bn<CR>', { noremap = true, silent = true })
@@ -29,3 +23,6 @@ vim.api.nvim_set_keymap('v', '<C-s>', '"hy:.,$s/<C-r>h//gc<left><left><left>', {
 
 -- Copy buffer filename to register
 vim.api.nvim_set_keymap('n', '<Leader>cbf', ':let @+ = expand("%:p")<CR>', { noremap = true, silent = true })
+
+-- Undo tree
+vim.keymap.set('n', '<Leader>u', '<cmd>Undotree<CR>', { noremap = true, silent = true })

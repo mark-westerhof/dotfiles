@@ -1,5 +1,4 @@
 return {
-  { 'gpanders/editorconfig.nvim' },
   {
     'lukas-reineke/indent-blankline.nvim',
     main = "ibl",
@@ -8,16 +7,5 @@ return {
     opts = {},
   },
   { 'tpope/vim-fugitive' },
-  {
-    'terrortylor/nvim-comment',
-    config = function()
-      require('nvim_comment').setup()
-    end
-  },
   { 'kylechui/nvim-surround', opts = {} },
-  {
-    'aserowy/tmux.nvim',
-    opts = {
-    }
-  }
 }

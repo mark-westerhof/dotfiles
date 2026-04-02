@@ -20,6 +20,9 @@ vim.opt.hlsearch = false
 vim.opt.mouse = ''
 vim.opt.cmdheight = 0
 
+-- Completion popup borders
+vim.opt.pumborder = 'single'
+
 -- Stay in the same column while navigating up/down
 vim.opt.virtualedit = 'all'
 
