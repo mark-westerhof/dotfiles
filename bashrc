@@ -37,9 +37,6 @@ export FZF_DEFAULT_COMMAND='rg --files'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--tmux'
 
-# API keys
-[ -f "$HOME/.api-keys.bash" ] && source $HOME/.api-keys.bash
-
 # gpg-agent for SVN
 GPG_TTY=$(tty)
 export GPG_TTY
@@ -87,6 +84,9 @@ alias create-fos-tags='git ls-files | grep -E "*\.(c|cpp|h)$" |
 grep -v -E "^linux-|^tools|^cooked|^tests" |
 ctags -R -L -'
 alias gerrit-review-push='git push origin HEAD:refs/for/$(git rev-parse --abbrev-ref HEAD)'
+
+# API keys
+[ -f "$HOME/.api-keys.bash" ] && source $HOME/.api-keys.bash
 
 # Print 256 color map for reference
 function printcolors() {
@@ -136,9 +136,19 @@ function worksession() {
         return 1
     fi
 
-    if ! (cd "$directory" && git worktree add "../${repo_name}-${branch}" -b "$branch" "$base"); then
-        echo "Error: failed to create worktree"
-        return 1
+    (cd "$directory" && git fetch origin)
+
+    if (cd "$directory" && git show-ref --verify --quiet "refs/remotes/origin/$branch"); then
+        echo "Remote branch 'origin/$branch' found, creating worktree from remote..."
+        if ! (cd "$directory" && git worktree add "../${repo_name}-${branch}" -b "$branch" "origin/$branch"); then
+            echo "Error: failed to create worktree from remote branch"
+            return 1
+        fi
+    else
+        if ! (cd "$directory" && git worktree add "../${repo_name}-${branch}" -b "$branch" "$base"); then
+            echo "Error: failed to create worktree"
+            return 1
+        fi
     fi
 
     (cd "$worktree_path" && tmux new -s "$session_name")
