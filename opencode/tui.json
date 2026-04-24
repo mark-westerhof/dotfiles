@@ -5,6 +5,14 @@
     "messages_half_page_up": "ctrl+u",
     "messages_half_page_down": "ctrl+d",
     "messages_page_up": "ctrl+b",
-    "messages_page_down": "ctrl+f"
+    "messages_page_down": "ctrl+f",
+    "session_child_first": "<leader>j",
+    "session_parent": "k",
+    "session_child_cycle": "l",
+    "session_child_cycle_reverse": "h",
+    "app_exit": "ctrl+c,<leader>q",
+    "session_delete": "<leader>D",
+    "stash_delete": "<leader>D"
   }
 }
+
