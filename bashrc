@@ -46,6 +46,12 @@ alias ssh-clip-support="ssh -o SendEnv=BASE_16_THEME -R 6788:localhost:22"
 alias remoteclip='ssh -p 6788 localhost pbcopy'
 alias sendbuffer='tmux show-buffer | remoteclip'
 
+# opencode wraps OSC 52 in a tmux DCS passthrough when $TMUX is set, which
+# forwards clipboard to the outer terminal instead of the tmux paste buffer.
+# Unsetting TMUX/STY makes it emit bare OSC 52 that tmux captures directly
+# (requires set-clipboard on in tmux.conf).
+alias opencode='env -u TMUX -u STY opencode'
+
 # Aider
 alias aid='aider --no-gitignore --subtree-only --chat-language english'
 
