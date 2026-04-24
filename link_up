@@ -35,6 +35,8 @@ fi
 # Claude Code and Opencode configuration
 mkdir -p ~/.claude
 ln -sf $CHECKOUT_PATH/claude/claude-statusline.sh ~/claude-statusline.sh
+mkdir -p ~/.config/opencode
+ln -sf $CHECKOUT_PATH/opencode/tui.json ~/.config/opencode/tui.json
 
 # FZF
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
