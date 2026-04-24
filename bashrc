@@ -51,6 +51,16 @@ alias sendbuffer='tmux show-buffer | remoteclip'
 # Unsetting TMUX/STY makes it emit bare OSC 52 that tmux captures directly
 # (requires set-clipboard on in tmux.conf).
 alias opencode='env -u TMUX -u STY opencode'
+alias oc='env -u TMUX -u STY opencode'
+
+# opencode "yolo": skip permission prompts. The TUI doesn't take
+# --dangerously-skip-permissions (that flag is `opencode run`-only), so we
+# inject permissions via OPENCODE_PERMISSION instead.
+ocd() {
+    env -u TMUX -u STY \
+        OPENCODE_PERMISSION='{"bash":"allow","edit":"allow","read":"allow","webfetch":"allow","task":"allow","skill":"allow"}' \
+        opencode "$@"
+}
 
 # Aider
 alias aid='aider --no-gitignore --subtree-only --chat-language english'
