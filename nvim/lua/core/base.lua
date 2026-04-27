@@ -40,3 +40,9 @@ vim.opt.splitright = true
 
 -- Ensure file changes trigger watch (https://www.jaykim.earth/posts/2023-06-28-gotchas-using-fs-watch-with-vim)
 vim.opt.backupcopy = 'yes'
+
+-- Mirror y/p to the system clipboard (+ register). Over SSH, neovim 0.10+
+-- routes + via OSC 52, which tmux + alacritty already pass through to the
+-- host pasteboard. Paste from host clipboard still goes through ⌘V at the
+-- terminal, since OSC 52 reads are blocked in alacritty by default.
+vim.opt.clipboard = 'unnamedplus'
