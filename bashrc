@@ -10,6 +10,11 @@ esac
 [ -d "$HOME/.volta" ] && VOLTA_HOME="$HOME/.volta" && PATH="$VOLTA_HOME/bin:$PATH"
 [ -d "$HOME/.opencode/bin" ] && PATH="$HOME/.opencode/bin:$PATH"
 
+# alacritty exports COLORTERM in [env], but ssh doesn't forward it. Setting
+# it here makes tmux pass nvim/opencode truecolor through over ssh instead
+# of downgrading to a 256-color approximation that doesn't match the bg.
+export COLORTERM=truecolor
+
 # Editor
 editor='vim'
 if command -v nvim >/dev/null 2>&1; then
