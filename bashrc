@@ -37,11 +37,6 @@ export FZF_DEFAULT_OPTS='--tmux'
 GPG_TTY=$(tty)
 export GPG_TTY
 
-# SSH/clipboard
-alias ssh-clip-support="ssh -R 6788:localhost:22"
-alias remoteclip='ssh -p 6788 localhost pbcopy'
-alias sendbuffer='tmux show-buffer | remoteclip'
-
 # opencode wraps OSC 52 in a tmux DCS passthrough when $TMUX is set, which
 # forwards clipboard to the outer terminal instead of the tmux paste buffer.
 # Unsetting TMUX/STY makes it emit bare OSC 52 that tmux captures directly
@@ -75,6 +70,10 @@ function aid-subdir() {
     aid $1
 }
 
+# Push a file from this remote back to the macOS host's ~/Downloads via the
+# RemoteForward 6788:localhost:22 declared in the host's ~/.ssh/config (see
+# bashrc_osx for the one-time setup). No-ops silently if the forward isn't
+# up (e.g. you SSH'd in from somewhere that's not the Mac).
 function remotesend() {
     scp -P 6788 $1 localhost:~/Downloads
 }

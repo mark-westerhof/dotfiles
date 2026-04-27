@@ -1,3 +1,28 @@
+# ─── One-time host setup (do this when bootstrapping a new laptop) ────────
+# remotesend / clipboard back-channel: add a RemoteForward block to
+# ~/.ssh/config for each remote host you want to reach back to this Mac.
+# Use ForwardAgent so the remote can re-authenticate back to this Mac
+# without needing a private key stored on the remote:
+#
+#   Host dev mybox other-trusted-host
+#     RemoteForward 6788 localhost:22
+#     ForwardAgent yes
+#
+# Then on this Mac:
+#   1. Add this Mac's own ~/.ssh/id_*.pub to ~/.ssh/authorized_keys
+#      (so the remote, via the forwarded agent, can ssh back in).
+#   2. System Settings → General → Sharing → Remote Login: ON
+#      (otherwise port 22 isn't listening to receive the tunneled scp).
+#
+# Once that's in place, `remotesend foo.tar.gz` on the remote scp's the
+# file to ~/Downloads here. Don't apply this to untrusted hosts — anyone
+# with code execution there gets an SSH-back channel to this Mac (and
+# access to the forwarded agent) for the duration of the session.
+#
+# link_up deliberately doesn't auto-edit ~/.ssh/config (too personal to
+# clobber), so this is a manual step on each new machine.
+# ──────────────────────────────────────────────────────────────────────────
+
 if [[ ! $- =~ "i" ]]; then
     # Not an interactive shell.
     return
