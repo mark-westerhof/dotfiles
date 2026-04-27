@@ -5,6 +5,9 @@ return {
     priority = 1000,
     config = function()
       require('onedark').setup({
+        colors = {
+          red = '#e06c75'
+        },
         highlights = {
           TelescopeBorder = {fg = '$grey'},
           TelescopePromptBorder = {fg = '$grey'},

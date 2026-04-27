@@ -10,15 +10,6 @@ esac
 [ -d "$HOME/.volta" ] && VOLTA_HOME="$HOME/.volta" && PATH="$VOLTA_HOME/bin:$PATH"
 [ -d "$HOME/.opencode/bin" ] && PATH="$HOME/.opencode/bin:$PATH"
 
-# Theme
-if [ -z $BASE_16_THEME ]; then
-    export BASE_16_THEME='onedark'
-    shell_theme=$HOME/.base16_themes/base16-$BASE_16_THEME.sh
-    if [ -f $shell_theme ]; then
-        . $shell_theme
-    fi
-fi
-
 # Editor
 editor='vim'
 if command -v nvim >/dev/null 2>&1; then
@@ -42,7 +33,7 @@ GPG_TTY=$(tty)
 export GPG_TTY
 
 # SSH/clipboard
-alias ssh-clip-support="ssh -o SendEnv=BASE_16_THEME -R 6788:localhost:22"
+alias ssh-clip-support="ssh -R 6788:localhost:22"
 alias remoteclip='ssh -p 6788 localhost pbcopy'
 alias sendbuffer='tmux show-buffer | remoteclip'
 
