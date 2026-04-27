@@ -58,7 +58,7 @@ alias oc='env -u TMUX -u STY opencode'
 # inject permissions via OPENCODE_PERMISSION instead.
 ocd() {
     env -u TMUX -u STY \
-        OPENCODE_PERMISSION='{"bash":"allow","edit":"allow","read":"allow","webfetch":"allow","task":"allow","skill":"allow"}' \
+        OPENCODE_PERMISSION='{"*":"allow"}' \
         opencode "$@"
 }
 
