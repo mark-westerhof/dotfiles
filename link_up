@@ -53,12 +53,12 @@ npm install -g vscode-langservers-extracted
 # @angular/language-server should be installed in each project as well.
 npm install -g @angular/cli @angular/language-server
 
-# Claude Code CLI
-curl -fsSL https://claude.ai/install.sh | bash
+# Vim Configuration
+mkdir -p ~/.config
+ln -sf $CHECKOUT_PATH/nvim ~/.config/nvim
 
 # Opencode
 curl -fsSL https://opencode.ai/install | bash
 
-# Vim Configuration
-mkdir -p ~/.config
-ln -sf $CHECKOUT_PATH/nvim ~/.config/nvim
+# Claude Code CLI
+curl -fsSL https://claude.ai/install.sh | bash
