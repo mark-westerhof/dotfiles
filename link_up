@@ -9,8 +9,9 @@ rm -rf ~/.volta
 rm -f ~/.config/nvim
 rm -rf ~/.local/share/nvim
 
-# Terminal Configuration
-ln -sf $CHECKOUT_PATH/alacritty.toml ~/.alacritty.toml
+# Terminal Configuration (Alacritty 0.13+ uses ~/.config/alacritty/)
+mkdir -p ~/.config/alacritty
+ln -sf $CHECKOUT_PATH/alacritty.toml ~/.config/alacritty/alacritty.toml
 
 # Tmux Configuration
 ln -sf $CHECKOUT_PATH/tmux.conf ~/.tmux.conf
