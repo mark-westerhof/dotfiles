@@ -3,6 +3,7 @@
   "theme": "one-dark",
   "keybinds": {
     "leader": "ctrl+g",
+    "input_newline": "shift+enter,ctrl+n",
     "messages_half_page_up": "ctrl+u",
     "messages_half_page_down": "ctrl+d",
     "messages_page_up": "ctrl+b",
