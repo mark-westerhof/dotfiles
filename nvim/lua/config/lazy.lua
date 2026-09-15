@@ -22,5 +22,9 @@ require("lazy").setup({
   spec = {
     { import = "plugins" },
   },
-  checker = { enabled = true },
+  -- FortiEDR/FortiClient authorize every exec on this machine; an unbounded
+  -- burst of git spawns (Lazy's macOS default) saturates them, stalls every
+  -- new process in _dyld_start, and cascades into system-wide EAGAIN.
+  concurrency = 4,
+  checker = { enabled = true, concurrency = 2 },
 })
