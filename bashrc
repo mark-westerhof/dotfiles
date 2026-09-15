@@ -27,6 +27,10 @@ export EDITOR=$editor
 export HISTSIZE=1000
 export HISTCONTROL=erasedups
 
+# Silence the readline bell (ambiguous tab completion, etc). Every BEL makes
+# alacritty ask macOS for attention, which bounces the dock icon.
+bind 'set bell-style none' 2>/dev/null
+
 # fzf
 [ -f "$HOME/.fzf.bash" ] && source $HOME/.fzf.bash
 export FZF_DEFAULT_COMMAND='rg --files'
