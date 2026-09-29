@@ -48,13 +48,12 @@ export GPG_TTY
 alias opencode='env -u TMUX -u STY opencode'
 alias oc='env -u TMUX -u STY opencode'
 
-# opencode "yolo": skip permission prompts. The TUI doesn't take
-# --dangerously-skip-permissions (that flag is `opencode run`-only), so we
-# inject permissions via OPENCODE_PERMISSION instead.
+# opencode "yolo": auto-approve permission prompts. In v1 the TUI had no
+# flag for this, so we injected permissions via OPENCODE_PERMISSION; v2
+# dropped that env var and added a native --auto flag instead.
 ocd() {
     env -u TMUX -u STY \
-        OPENCODE_PERMISSION='{"*":"allow"}' \
-        opencode "$@"
+        opencode --auto "$@"
 }
 
 # Aider
