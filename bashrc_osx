@@ -21,6 +21,23 @@
 #
 # link_up deliberately doesn't auto-edit ~/.ssh/config (too personal to
 # clobber), so this is a manual step on each new machine.
+#
+# Ghostty + dev-attach: keep the dev connection's liveness checks short so
+# dev-attach notices a dead link (lid close, wifi change) and reconnects:
+#
+#   Host mwesterhof-dev-server
+#     ServerAliveInterval 15
+#     ServerAliveCountMax 3
+#
+# The dev server has no xterm-ghostty terminfo entry; install it once:
+#
+#   infocmp -x xterm-ghostty | ssh mwesterhof-dev-server -- tic -x -
+#
+# Optional, on the server's /etc/ssh/sshd_config, so a stale connection
+# frees RemoteForward 6788 quickly and remotesend works after a reconnect:
+#
+#   ClientAliveInterval 15
+#   ClientAliveCountMax 3
 # ──────────────────────────────────────────────────────────────────────────
 
 if [[ ! $- =~ "i" ]]; then
@@ -35,5 +52,12 @@ export LSCOLORS=ExFxBxDxCxegedabagacad
 alias ll='ls -l'
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Ghostty's quick terminal (and any extra window) lands in local tmux. Not
+# exec'd, so detaching drops to a plain shell. The main window runs
+# dev-attach directly rather than an interactive shell, so this skips it.
+if [ "$TERM_PROGRAM" = ghostty ] && [ -z "$TMUX" ]; then
+    tmux new -A -s local
+fi
 
 [[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . $(brew --prefix)/etc/profile.d/bash_completion.sh

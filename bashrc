@@ -173,3 +173,8 @@ function conf-fos-model() {
     CONFIG_BUILD_GUI_ARTIFACTS=y ./Configure -m $1 -dy -v $(git rev-parse --abbrev-ref HEAD)
 }
 
+# Prompt: hostname colored per machine (yellow on the Mac, blue on the dev
+# server) to match the tmux badge. Set last so it wins over bashrc_osx.
+if [ "$(uname)" = Darwin ]; then host_color='1;33'; else host_color='1;34'; fi
+PS1="\[\e[${host_color}m\]\h\[\e[m\] \[\e[34m\]\w\[\e[m\] \\\$ "
+unset host_color

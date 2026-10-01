@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Keep a tmux session on the dev server attached; reconnect after sleep or network drops.
+host=${1:-mwesterhof-dev-server}   # ssh alias; pass another as $1 if it changes
+trap 'exit 130' INT
+while true; do
+  ssh -t "$host" 'tmux attach 2>/dev/null || tmux new -s main' && exit 0
+  printf '\n\e[33mconnection to %s lost, reconnecting in 2s (ctrl-c to stop)\e[m\n' "$host"
+  sleep 2
+done

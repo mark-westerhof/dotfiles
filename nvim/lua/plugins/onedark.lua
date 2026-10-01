@@ -5,8 +5,17 @@ return {
     priority = 1000,
     config = function()
       require('onedark').setup({
+        style = 'dark',
+        code_style = {
+          comments = 'italic',
+          keywords = 'bold'
+        },
+        diagnostics = {
+          undercurl = true
+        },
         colors = {
-          red = '#e06c75'
+          red = '#e06c75',
+          grey = '#7f848e'
         },
         highlights = {
           TelescopeBorder = {fg = '$grey'},

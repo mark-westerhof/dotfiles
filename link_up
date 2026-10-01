@@ -14,6 +14,13 @@ rm -f ~/.tmux_osx.conf
 mkdir -p ~/.config/alacritty
 ln -sf $CHECKOUT_PATH/alacritty.toml ~/.config/alacritty/alacritty.toml
 
+# Ghostty (macOS): main window runs dev-attach, quick terminal is local tmux
+if [ "$(uname)" == "Darwin" ]; then
+    mkdir -p ~/.config/ghostty ~/bin
+    ln -sf $CHECKOUT_PATH/ghostty/config ~/.config/ghostty/config
+    ln -sf $CHECKOUT_PATH/bin/dev-attach ~/bin/dev-attach
+fi
+
 # Tmux Configuration
 ln -sf $CHECKOUT_PATH/tmux.conf ~/.tmux.conf
 
