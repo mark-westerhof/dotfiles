@@ -130,7 +130,8 @@ function worksession() {
     directory=${1%/}
     branch=$2
     base=$3
-    session_name="${directory}-${branch}"
+    # repo/branch: the tmux bar shows these as ›branch next to their repo
+    session_name="${directory}/${branch}"
     repo_name="$(basename "$directory")"
     repo_parent="$(dirname "$directory")"
     worktree_path="${repo_parent}/${repo_name}-${branch}"
