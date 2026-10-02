@@ -12,10 +12,9 @@ window-padding-x = 14
 window-padding-y = 10
 window-padding-balance = true
 macos-titlebar-style = transparent
-# Non-native fullscreen hides the menu bar without its own Space, so moving
-# the window to another monitor does not leave a black Space behind.
-# cmd+enter toggles back to a normal window to drag it around.
-fullscreen = non-native
+# Windows open as normal windows; cmd+enter toggles fullscreen. Non-native
+# fullscreen hides the menu bar without its own Space, so moving the window
+# to another monitor does not leave a black Space behind.
 macos-non-native-fullscreen = true
 mouse-hide-while-typing = true
 
