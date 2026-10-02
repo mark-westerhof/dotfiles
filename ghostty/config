@@ -54,4 +54,4 @@ initial-command = /bin/bash -c 'exec "$HOME/bin/dev-attach"'
 # Quick terminal: local Mac tmux
 keybind = global:ctrl+grave_accent=toggle_quick_terminal
 quick-terminal-position = top
-quick-terminal-size = 80%
+quick-terminal-size = 90%
