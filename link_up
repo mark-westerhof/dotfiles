@@ -26,8 +26,7 @@ ln -sf $CHECKOUT_PATH/tmux.conf ~/.tmux.conf
 
 # Bash Configuration
 if [ "$(uname)" == "Darwin" ]; then
-    cp $CHECKOUT_PATH/bashrc_osx ~/.bashrc
-    echo -e "\n. $CHECKOUT_PATH/bashrc" >> ~/.bashrc
+    printf '. %s\n. %s\n' "$CHECKOUT_PATH/bashrc_osx" "$CHECKOUT_PATH/bashrc" > ~/.bashrc
     echo "[ -f $(brew --prefix)/etc/bash_completion ] && . $(brew --prefix)/etc/bash_completion" > ~/.bash_profile
     echo "[ -f "$HOME/.bashrc" ] && . $HOME/.bashrc" >> ~/.bash_profile
 else

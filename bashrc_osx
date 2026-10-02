@@ -53,11 +53,13 @@ alias ll='ls -l'
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# Ghostty's quick terminal (and any extra window) lands in local tmux. Not
-# exec'd, so detaching drops to a plain shell. The main window runs
-# dev-attach directly rather than an interactive shell, so this skips it.
+# Ghostty's quick terminal (and any extra window) lands in local tmux,
+# reattaching to an existing session (whatever it was renamed to) before
+# creating a new "local" one. Not exec'd, so detaching drops to a plain
+# shell. The main window runs dev-attach directly rather than an
+# interactive shell, so this skips it.
 if [ "$TERM_PROGRAM" = ghostty ] && [ -z "$TMUX" ]; then
-    tmux new -A -s local
+    tmux attach 2>/dev/null || tmux new -s local
 fi
 
 [[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . $(brew --prefix)/etc/profile.d/bash_completion.sh
