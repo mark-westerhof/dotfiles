@@ -30,3 +30,6 @@ require("lazy").setup({
   change_detection = { notify = false },
   rocks = { enabled = false },
 })
+
+-- After lazy so onedark is loaded before the rule colours go on top.
+require('core.statusline')
