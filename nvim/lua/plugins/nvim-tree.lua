@@ -6,8 +6,6 @@ return {
   },
   config = function()
     local tree = require('nvim-tree')
-    local treeInitialized = false
-
     tree.setup({
       update_focused_file = {
         enable = true

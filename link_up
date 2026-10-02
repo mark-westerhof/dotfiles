@@ -39,6 +39,20 @@ ln -sf $CHECKOUT_PATH/claude/claude-statusline.sh ~/claude-statusline.sh
 mkdir -p ~/.config/opencode
 ln -sf $CHECKOUT_PATH/opencode/tui.json ~/.config/opencode/tui.json
 
+# Tree-sitter CLI, which nvim-treesitter (main branch) uses to compile parsers.
+# Taken from the release binary rather than npm: grammar repos list
+# tree-sitter-cli as a devDependency, so Volta's shim refuses to run a global
+# install inside them ("Could not locate executable in your project").
+case "$(uname -s)-$(uname -m)" in
+  Darwin-arm64) TS_PLATFORM=macos-arm64 ;;
+  Darwin-x86_64) TS_PLATFORM=macos-x64 ;;
+  Linux-aarch64) TS_PLATFORM=linux-arm64 ;;
+  *) TS_PLATFORM=linux-x64 ;;
+esac
+mkdir -p ~/.local/bin
+curl -fsSL "https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-$TS_PLATFORM.gz" | gunzip > ~/.local/bin/tree-sitter
+chmod +x ~/.local/bin/tree-sitter
+
 # FZF
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --completion --key-bindings --no-update-rc --no-zsh --no-fish

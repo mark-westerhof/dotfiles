@@ -8,7 +8,7 @@ return {
         section_separators = '',
         component_separators = '',
         globalstatus = true,
-        disabled_filetypes = { 'packer', 'TelescopePrompt', 'NvimTree' }
+        disabled_filetypes = { 'TelescopePrompt', 'NvimTree' }
       },
       sections = {
         lualine_b = {

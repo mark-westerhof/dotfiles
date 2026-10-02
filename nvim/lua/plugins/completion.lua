@@ -107,15 +107,6 @@ return {
         })
       })
 
-      -- Set configuration for specific filetype.
-      cmp.setup.filetype('gitcommit', {
-        sources = cmp.config.sources({
-          { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-        }, {
-          { name = 'buffer' },
-        })
-      })
-
       -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
       cmp.setup.cmdline('/', {
         mapping = cmp.mapping.preset.cmdline(),
@@ -147,9 +138,8 @@ return {
       })
 
       local opts = { noremap = true, silent = true }
-      vim.keymap.set('n', '[g', vim.diagnostic.goto_prev, opts)
-      vim.keymap.set('n', ']g', vim.diagnostic.goto_next, opts)
-      vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+      vim.keymap.set('n', '[g', function() vim.diagnostic.jump({ count = -1, float = true }) end, opts)
+      vim.keymap.set('n', ']g', function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
 
       vim.api.nvim_set_keymap('n', '<Leader>fl', ':LspEslintFixAll<CR>', opts)
       vim.api.nvim_set_keymap('n', '<Leader>rlsp', ':LspRestart<CR>', opts)
@@ -235,7 +225,7 @@ return {
         end,
         cmd = function(dispatchers, config)
           local root_dir = (config and config.root_dir) or vim.fn.getcwd()
-          local node_modules = config.root_dir .. '/node_modules'
+          local node_modules = root_dir .. '/node_modules'
           local angular_version = get_angular_core_version(root_dir)
           local ts_probe = node_modules
           local ng_probe = node_modules .. '/@angular/language-server/node_modules'

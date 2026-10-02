@@ -1,12 +1,16 @@
 return {
   {
     "folke/noice.nvim",
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify", -- You already have this plugin
+    lazy = false,
+    dependencies = { "MunifTanjim/nui.nvim" },
+    keys = {
+      { "<Leader>x", "<cmd>Noice dismiss<CR>", desc = "Dismiss messages" },
     },
     config = function()
       require("noice").setup({
+        -- Small corner text instead of popups; :Noice shows the history
+        notify = { view = "mini" },
+        messages = { view = "mini", view_warn = "mini", view_error = "mini" },
         lsp = {
           -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
           override = {
@@ -20,6 +24,9 @@ return {
           hover = {
             enabled = true,
           },
+          message = {
+            view = "mini",
+          },
         },
         -- you can enable a preset for easier configuration
         presets = {
@@ -27,7 +34,7 @@ return {
           command_palette = true, -- position the cmdline and popupmenu together
           long_message_to_split = true, -- long messages will be sent to a split
           inc_rename = false, -- enables an input dialog for inc-rename.nvim
-          lsp_doc_border = false, -- add a border to hover docs and signature help
+          lsp_doc_border = true, -- add a border to hover docs and signature help
         },
       })
     end

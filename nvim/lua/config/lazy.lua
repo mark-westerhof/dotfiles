@@ -26,5 +26,7 @@ require("lazy").setup({
   -- burst of git spawns (Lazy's macOS default) saturates them, stalls every
   -- new process in _dyld_start, and cascades into system-wide EAGAIN.
   concurrency = 4,
-  checker = { enabled = true, concurrency = 2 },
+  checker = { enabled = false },
+  change_detection = { notify = false },
+  rocks = { enabled = false },
 })
