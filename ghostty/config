@@ -11,8 +11,12 @@ adjust-cell-height = 4
 window-padding-x = 14
 window-padding-y = 10
 window-padding-balance = true
-macos-titlebar-style = hidden
-fullscreen = true
+macos-titlebar-style = transparent
+# Non-native fullscreen hides the menu bar without its own Space, so moving
+# the window to another monitor does not leave a black Space behind.
+# cmd+enter toggles back to a normal window to drag it around.
+fullscreen = non-native
+macos-non-native-fullscreen = true
 mouse-hide-while-typing = true
 
 # One Dark refined. Spelled out instead of a bundled theme name so it can't
