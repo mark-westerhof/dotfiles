@@ -21,9 +21,10 @@ branch=$(git branch --show-current 2>/dev/null || echo "no-git")
 status="󰚩 $model | 󰊢 $branch"
 
 if [ -n "$used" ]; then
-  # Dot icons (Nerd Font octicons)
-  dot_fill=$''
-  dot_empty=$''
+  # Plain Unicode circles from the main font: Ghostty shrinks Nerd Font icons
+  # to fit a cell, which made the octicon dots tiny
+  dot_fill='●'
+  dot_empty='○'
 
   # ANSI colors
   green='\033[32m'
