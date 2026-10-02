@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Git segment for the right of the tmux bar: branch, uncommitted +/- lines,
+# untracked count and ahead/behind. Prints nothing outside a repo, so the
+# segment (with its trailing separator) disappears.
+# Usage: tmux-git-status <path> <accent colour>
+path=${1:-.}
+accent=${2:-#61afef}
+FG='#abb2bf' MUTED='#7f848e' DIM='#5c6370' GREEN='#98c379' RED='#e06c75'
+ICON=$'\xee\x82\xa0'   # nerd font branch glyph (U+E0A0)
+
+status=$(git -C "$path" status --porcelain=v2 --branch 2>/dev/null) || exit 0
+
+branch='' oid='' ahead=0 behind=0 untracked=0
+while IFS= read -r line; do
+  case $line in
+    '# branch.oid '*) oid=${line#\# branch.oid } ;;
+    '# branch.head '*) branch=${line#\# branch.head } ;;
+    '# branch.ab '*) read -r _ _ ahead behind <<<"$line"; ahead=${ahead#+}; behind=${behind#-} ;;
+    '?'*) untracked=$((untracked + 1)) ;;
+  esac
+done <<<"$status"
+[[ $branch == '(detached)' ]] && branch=${oid:0:7}
+
+# Staged and unstaged line counts against HEAD; a repo without commits only has the index.
+if [[ $oid == '(initial)' ]]; then
+  stat=$(git -C "$path" diff --shortstat --cached 2>/dev/null)
+else
+  stat=$(git -C "$path" diff --shortstat HEAD 2>/dev/null)
+fi
+added=$(sed -n 's/.* \([0-9]*\) insertion.*/\1/p' <<<"$stat")
+deleted=$(sed -n 's/.* \([0-9]*\) deletion.*/\1/p' <<<"$stat")
+
+out="#[fg=$accent]$ICON #[fg=$FG]$branch "
+[[ ${added:-0} -gt 0 ]] && out+="#[fg=$GREEN]+$added "
+[[ ${deleted:-0} -gt 0 ]] && out+="#[fg=$RED]-$deleted "
+[[ $untracked -gt 0 ]] && out+="#[fg=$MUTED]?$untracked "
+[[ $ahead -gt 0 ]] && out+="#[fg=$MUTED]↑$ahead "
+[[ $behind -gt 0 ]] && out+="#[fg=$MUTED]↓$behind "
+printf '%s#[fg=%s]│ ' "$out" "$DIM"

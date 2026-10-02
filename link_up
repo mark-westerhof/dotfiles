@@ -53,6 +53,9 @@ mkdir -p ~/.local/bin
 curl -fsSL "https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-$TS_PLATFORM.gz" | gunzip > ~/.local/bin/tree-sitter
 chmod +x ~/.local/bin/tree-sitter
 
+# Git segment for the tmux bar
+ln -sf $CHECKOUT_PATH/bin/tmux-git-status ~/.local/bin/tmux-git-status
+
 # FZF
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --completion --key-bindings --no-update-rc --no-zsh --no-fish
