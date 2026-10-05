@@ -11,7 +11,9 @@ if [ "$TERM" = xterm-ghostty ] && infocmp -x xterm-ghostty >/dev/null 2>&1; then
 fi
 
 while true; do
-  ssh -t "$host" 'tmux attach 2>/dev/null || tmux new -s main'
+  # Fall through to a login shell after detaching, so the connection stays up
+  # for starting or picking another session; exiting that shell ends dev-attach.
+  ssh -t "$host" 'tmux attach 2>/dev/null || tmux new -s main; exec "$SHELL" -l'
   status=$?
   # A dropped link never lets the remote tmux undo its terminal modes, so the
   # local terminal keeps sending mouse reports (and bracketed-paste markers)
